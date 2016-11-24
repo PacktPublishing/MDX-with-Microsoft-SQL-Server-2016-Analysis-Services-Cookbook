@@ -1,0 +1,21 @@
+--the order of Best month per year is reversed
+WITH   
+SET [Best month per year reversed] AS
+	Generate( [Date].[Calendar].[Calendar Year].MEMBERS
+	          AS MySetAlias,
+			  TopCount(
+				Descendants( MySetAlias.Item( MySetAlias.Count -
+				                              MySetAlias.CurrentOrdinal - 1 ).Item(0),
+			                 [Date].[Calendar].[Month],
+			                 SELF ),
+			    1,
+			    [Measures].[Sales Amount] )
+		    )
+SELECT
+	NON EMPTY
+	{ [Best month per year reversed] *
+	  [Measures].[Sales Amount] } ON 0,
+	NON EMPTY
+	{ [Sales Territory].[Sales Territory Country].MEMBERS } ON 1
+FROM
+	[Adventure Works]

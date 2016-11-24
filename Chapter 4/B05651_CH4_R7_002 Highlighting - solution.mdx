@@ -1,0 +1,34 @@
+WITH   
+MEMBER [Measures].[Category] AS
+	iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+	     null,
+	     [Product].[Product Categories].CurrentMember.Parent.Name )
+CELL CALCULATION [Highlighted Amount]
+FOR '{ [Measures].[Internet Sales Amount] }' AS
+	[Measures].[Internet Sales Amount]
+	, BACK_COLOR = 
+		iif( [Measures].CurrentMember =
+		      Max( [Product].[Product Categories]
+                   .CurrentMember.Siblings,
+			       [Measures].CurrentMember ),
+			  RGB(128,242,128), -- green
+		      iif( [Measures].CurrentMember = 
+			        Min( [Product].[Product Categories]
+                         .CurrentMember.Siblings,
+				         [Measures].CurrentMember ),
+			        RGB(242,128,128), -- red
+			        null )
+		   )
+SELECT
+	{ [Measures].[Category],
+	  [Measures].[Internet Sales Amount] } ON 0,
+	NON EMPTY
+	{ Descendants( [Product].[Product Categories].[Category],
+				   1, SELF ) } ON 1
+FROM
+	[Adventure Works]
+CELL PROPERTIES
+	VALUE,
+	FORMATTED_VALUE,
+	FORE_COLOR,
+	BACK_COLOR

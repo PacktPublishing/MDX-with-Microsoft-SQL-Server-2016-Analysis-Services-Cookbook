@@ -1,0 +1,13 @@
+SELECT
+	{ [Measures].[Reseller Order Count] } ON 0,
+	NON EMPTY
+	{ [Promotion].[Promotion].MEMBERS }
+	DIMENSION PROPERTIES
+		[Promotion].[Promotion].[Discount Percent]
+	ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( - { [Promotion].[Discount Percent].&[0],
+	      [Promotion].[Discount Percent].&[2.E-2],
+          [Promotion].[Discount Percent].&[5.E-2] } )

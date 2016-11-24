@@ -1,0 +1,10 @@
+WITH   
+SET [Top 5 Resellers] AS
+	Head( Order( [Reseller].[Reseller].[Reseller].MEMBERS,
+	             [Measures].[Reseller Sales Amount],
+      	         BDESC ), 5 )
+SELECT
+	{ [Measures].[Reseller Sales Amount] } ON 0,
+	{ [Top 5 Resellers] } ON 1
+FROM
+	[Adventure Works]

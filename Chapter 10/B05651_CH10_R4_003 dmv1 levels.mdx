@@ -1,0 +1,9 @@
+SELECT
+   *
+FROM
+   $system.MDSCHEMA_LEVELS
+WHERE
+   [CATALOG_NAME] = 'Adventure Works DW 2016'
+   AND LEFT(CUBE_NAME, 1) <> '$' -- avoid dimension cubes
+   AND [LEVEL_TYPE] <> 1 -- avoid root levels
+   AND LEVEL_IS_VISIBLE -- avoid hidden levels

@@ -1,0 +1,150 @@
+Create Member CurrentCube.[Measures].[MDX Formula]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('MDX Formula')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Format String]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('Format String')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Multiplication Factor]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('Multiplication Factor')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Unary Operator]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('Unary Operator')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Calculation Type]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('Calculation Type')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Is Growth Positive]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('Is Growth Positive')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Status Low]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('Status Low')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Status High]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('Status High')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Value]
+As
+	null
+
+    ,Visible = 1
+    ,Display_Folder = 'Reporting Measures'; 
+
+Scope( [Measures].[Value] );
+        Scope( [Reporting Dimension].[Hierarchy].Members );
+            This = iif( [Measures].[MDX Formula] = '', 
+			            RollupChildren( [Reporting Dimension].[Hierarchy].CurrentMember,
+                                        [Measures].[Unary Operator] ),
+                        iif( [Measures].[Calculation Type] = 'X',
+			                 StrToValue( [Reporting Dimension].[Hierarchy].CurrentMember.Properties('MDX Formula') ),
+ 			                 StrToValue( 'Sum( [Reporting Dimension].[Hierarchy].[All], ' + 
+                                         [Reporting Dimension].[Hierarchy].CurrentMember.Properties('MDX Formula') +
+                                         ' )'
+						               )
+						   )
+                        /
+                        iif( [Measures].[Multiplication Factor] = 0, 1,
+                             [Measures].[Multiplication Factor]
+                            )
+                      );
+		Format_String(This) = [Measures].[Format String];
+        End Scope;
+    Scope( Root( [Reporting Dimension] ) );
+        This = null;
+    End Scope;
+    Scope( Root( [Date] ) );
+        This = null;
+    End Scope;
+End Scope;
+
+Create Member CurrentCube.[Measures].[Value Prev Year]
+As
+	iif( [Date].[Fiscal].CurrentMember.Level.Ordinal = 0, null,
+         iif( [Date].[Fiscal].CurrentMember.Level.Ordinal = 1,
+              ( [Measures].[Value], 
+                [Date].[Fiscal].CurrentMember.PrevMember ),
+              ( [Measures].[Value], 
+                ParallelPeriod( [Date].[Fiscal].[Fiscal Year],
+                                1, [Date].[Fiscal].CurrentMember ) )
+            )
+        )
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Status]
+As
+    iif( [Measures].[Value] = 0, null,
+    iif( [Measures].[Is Growth Positive] = 'Yes',
+    Case
+        When [Measures].[Value] - CoalesceEmpty( [Measures].[Status High], 0 ) >= 0
+        Then 1
+        When [Measures].[Value] - CoalesceEmpty( [Measures].[Status Low], 0 ) < 0
+        Then -1
+        Else 0
+    End,
+    Case
+        When [Measures].[Value] - CoalesceEmpty( [Measures].[Status High], 0 ) <= 0
+        Then 1
+        When [Measures].[Value] - CoalesceEmpty( [Measures].[Status Low], 0 ) > 0
+        Then -1
+        Else 0
+    End
+    )
+    )
+
+    ,Visible = 1
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Trend]
+As
+    iif( [Measures].[Value Prev Year] = 0 OR IsEmpty( [Measures].[Value] ), null,
+    iif( [Measures].[Is Growth Positive] = 'Yes',
+    Case
+        When ( [Measures].[Value] - [Measures].[Value Prev Year] ) / 
+               [Measures].[Value Prev Year] > 0
+        Then 1
+        Else -1
+    End,
+    Case
+        When ( [Measures].[Value] - [Measures].[Value Prev Year] ) / 
+               [Measures].[Value Prev Year] < 0
+        Then 1
+        Else -1
+    End
+    )
+    )
+
+    ,Visible = 1
+    ,Display_Folder = 'Reporting Measures'; 

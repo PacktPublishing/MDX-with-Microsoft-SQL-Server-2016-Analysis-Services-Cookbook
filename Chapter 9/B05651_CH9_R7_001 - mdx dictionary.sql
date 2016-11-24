@@ -1,0 +1,1 @@
+SELECT * FROM OPENQUERY( MetadataExcel, 'SELECT * FROM [MDX_Dictionary$]' )

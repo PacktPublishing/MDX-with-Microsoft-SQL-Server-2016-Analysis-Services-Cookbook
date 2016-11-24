@@ -1,0 +1,18 @@
+DRILLTHROUGH
+SELECT
+FROM
+	[Adventure Works]	
+WHERE
+	( [Date].[Calendar].[Calendar Year].&[2011],
+	  [Department].[Departments].&[6],
+	  [Scenario].[Scenario].&[1],
+	  [Measures].[Amount] )
+RETURN
+	[$Date].[Date],
+	MemberValue([$Date].[Date]),
+	UnaryOperator([$Account].[Account]),
+	[Financial Reporting].[Amount],
+	[$Scenario].[Scenario],
+	[$Department].[Department],
+	[$Account].[Accounts],
+	[$Account].[Account]

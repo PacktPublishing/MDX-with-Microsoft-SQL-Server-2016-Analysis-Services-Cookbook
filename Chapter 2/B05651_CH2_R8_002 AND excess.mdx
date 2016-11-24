@@ -1,0 +1,9 @@
+SELECT
+	{ [Measures].[Reseller Order Quantity],
+	  [Measures].[Reseller Order Count] } ON 0,
+	NON EMPTY
+	{ [Date].[Month of Year].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Promotion].[Promotion Type].&[Excess Inventory] )

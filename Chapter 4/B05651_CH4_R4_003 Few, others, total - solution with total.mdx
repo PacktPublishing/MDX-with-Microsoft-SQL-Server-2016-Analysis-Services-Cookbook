@@ -1,0 +1,16 @@
+WITH   
+SET [Top 5 Resellers] AS
+	TopCount( [Reseller].[Reseller].[Reseller].MEMBERS,
+			   5,
+			  [Measures].[Reseller Sales Amount] )
+MEMBER [Reseller].[Reseller].[All].[Other Resellers] AS
+	Aggregate( - [Top 5 Resellers] )
+MEMBER [Reseller].[Reseller].[All].[Total] AS
+	[Reseller].[Reseller].[All]
+SELECT
+	{ [Measures].[Reseller Sales Amount] } ON 0,
+	{ [Top 5 Resellers],
+	  [Reseller].[Reseller].[All].[Other Resellers],
+	  [Reseller].[Reseller].[All].[Total] } ON 1
+FROM
+	[Adventure Works]

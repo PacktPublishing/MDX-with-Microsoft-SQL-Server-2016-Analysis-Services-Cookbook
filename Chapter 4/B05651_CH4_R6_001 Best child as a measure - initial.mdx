@@ -1,0 +1,14 @@
+WITH
+MEMBER [Measures].[Subcategory] AS
+	iif( IsEmpty([Measures].[Internet Sales Amount] ),
+         null,
+         [Product].[Product Categories].CurrentMember.Parent.Name
+       )
+SELECT
+	{ [Measures].[Subcategory],
+	  [Measures].[Internet Sales Amount] } ON 0,
+	NON EMPTY
+	{ Descendants( [Product].[Product Categories].[Category],
+				    2, SELF_AND_BEFORE ) } ON 1
+FROM
+	[Adventure Works]

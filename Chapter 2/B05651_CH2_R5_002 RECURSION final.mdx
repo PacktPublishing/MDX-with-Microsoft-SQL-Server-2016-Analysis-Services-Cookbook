@@ -1,0 +1,17 @@
+WITH
+MEMBER [Measures].[Average of an average] AS
+	iif( IsLeaf( [Date].[Fiscal Weeks].CurrentMember ),
+	     [Measures].[Order Count],
+ 	     Avg( [Date].[Fiscal Weeks].CurrentMember.Children,
+	          [Measures].[Average of an average] )
+	    )
+  , FORMAT_STRING = '#,#'
+SELECT
+	{ [Measures].[Order Count],
+	  [Measures].[Average of an average] } ON 0,
+	NON EMPTY	  
+	{ Descendants( [Date].[Fiscal Weeks].[All Periods],
+				   1 , SELF_AND_BEFORE) } ON 1
+FROM
+	[Adventure Works]
+

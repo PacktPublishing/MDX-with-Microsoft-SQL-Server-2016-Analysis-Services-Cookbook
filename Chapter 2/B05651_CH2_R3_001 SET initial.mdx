@@ -1,0 +1,9 @@
+SELECT
+	{ [Measures].[Customer Count],
+	  [Measures].[Growth in Customer Base] } ON 0,
+	NON EMPTY
+	{ [Date].[Fiscal].[Month].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Product].[Product Categories].[Subcategory].&[1] )

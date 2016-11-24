@@ -1,0 +1,6 @@
+Create Member CurrentCube.[Measures].[Sales] As null;
+
+Scope( ( { [Date].[Calendar].[Month].&[2011]&[1] : [Date].[Calendar].[Month].&[2012]&[6] },
+         [Measures].[Sales] ) );
+    This = [Measures].[Sales Amount];
+End Scope;

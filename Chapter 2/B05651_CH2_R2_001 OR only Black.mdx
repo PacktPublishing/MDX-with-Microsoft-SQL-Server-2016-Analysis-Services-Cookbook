@@ -1,0 +1,9 @@
+SELECT
+	{ [Measures].[Reseller Order Quantity],
+	  [Measures].[Reseller Order Count] } ON 0,
+	NON EMPTY
+	{ [Product].[Subcategory].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Product].[Color].&[Black] )

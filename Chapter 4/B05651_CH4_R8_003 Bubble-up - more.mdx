@@ -1,0 +1,27 @@
+WITH
+MEMBER [Measures].[Margin with Bubble-up] AS
+	[Measures].[Reseller Gross Profit Margin]
+	, FORE_COLOR = 
+		iif(
+			Min( Descendants( [Product].[Product Categories].CurrentMember,
+							   1, SELF ),
+			     [Measures].CurrentMember ) < 0,
+			RGB( 255, 0, 0 ),
+			null
+		   )
+SELECT
+	{ [Measures].[Reseller Sales Amount],
+	  [Measures].[Reseller Gross Profit Margin],
+	  [Measures].[Margin with Bubble-up] } ON 0,
+	NON EMPTY
+	{ Descendants( [Product].[Product Categories].[Category],
+				   2, BEFORE ) } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Date].[Fiscal].[Fiscal Year].&[2013] )
+CELL PROPERTIES
+	VALUE,
+	FORMATTED_VALUE,
+	FORE_COLOR,
+	BACK_COLOR	

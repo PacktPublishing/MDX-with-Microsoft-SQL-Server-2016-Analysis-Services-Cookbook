@@ -1,0 +1,5 @@
+SELECT
+	{ [Measures].[Sales Amount] } ON 0,
+	{ [Date].[Calendar].[Month].MEMBERS } ON 1
+FROM
+	[Adventure Works]

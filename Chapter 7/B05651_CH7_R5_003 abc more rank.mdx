@@ -1,0 +1,35 @@
+WITH
+MEMBER [Measures].[Measure for ABC] AS
+	[Measures].[Internet Gross Profit]
+SET [Set for ABC] AS
+	NonEmpty( [Product].[Product].[Product].MEMBERS, 
+	          [Measures].[Measure for ABC] )
+SET [A] AS
+	TopPercent( [Set for ABC], 30, [Measures].[Measure for ABC] )
+SET [B] AS
+	TopPercent( [Set for ABC], 80, [Measures].[Measure for ABC] ) - [A]
+SET [C] AS
+	[Set for ABC] - [A] - [B]
+MEMBER [Measures].[Rank in set] AS
+	iif( IsEmpty( [Measures].[Measure for ABC] ), null,
+		 Rank( [Product].[Product].CurrentMember,
+		       [Set for ABC],
+		       [Measures].[Measure for ABC] ) )
+	, FORMAT_STRING = '#,#'
+MEMBER [Measures].[ABC Group] AS
+	iif( IsEmpty( [Measures].[Measure for ABC] ), null,
+		 iif( [Measures].[Rank in set] <= [A].Count,
+			  'A',
+			  iif( [Measures].[Rank in set] <= {[A] + [B]}.Count,
+			        'B', 'C' ) ) )
+SELECT
+	{ [Measures].[Measure for ABC],
+	  [Measures].[Rank in set],
+	  [Measures].[ABC Group] } ON 0,
+	NON EMPTY
+	{ [Product].[Product].[Product].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Product].[Status].&[Current],
+	  [Date].[Calendar Year].&[2012] )

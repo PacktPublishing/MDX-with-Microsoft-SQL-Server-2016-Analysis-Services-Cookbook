@@ -1,0 +1,9 @@
+Create Dynamic Set CurrentCube.[Loyal Customers Set] AS
+	NonEmpty( [Customer].[Customer].[Customer].MEMBERS,
+		      [Measures].[Customer Count] ) -
+	(
+		NonEmpty( [Customer].[Customer].[Customer].MEMBERS,
+				  [Measures].[Agg TD] ) -
+		NonEmpty( [Customer].[Customer].[Customer].MEMBERS,
+				  [Measures].[Agg TD prev] )
+	);

@@ -1,0 +1,38 @@
+WITH
+
+MEMBER [Measures].[Average of an average] AS
+	iif( IsLeaf( [Date].[Fiscal Weeks].CurrentMember ),
+	     [Measures].[Order Count],
+ 	     Avg( [Date].[Fiscal Weeks].CurrentMember.Children,
+	          [Measures].[Average of an average] )
+	    )
+  , FORMAT_STRING = '#,#'
+
+MEMBER [Measures].[Proof] AS
+	iif( IsEmpty( [Measures].[Order Count] ),
+		 null,
+		iif( IsLeaf( [Date].[Fiscal Weeks].CurrentMember ),
+			 [Measures].[Order Count],
+ 			 '( ' +
+ 			 Generate( [Date].[Fiscal Weeks].CurrentMember.Children,
+					   iif( IsEmpty( [Measures].[Average of an average] ),
+							'(null)',
+							CStr( Round( [Measures].[Average of an average], 0 ) )
+						  ),
+					   ' + ' ) +
+			 ' ) / ' +
+			 CStr( NonEmpty( [Date].[Fiscal Weeks].CurrentMember.Children,
+							 [Measures].[Order Count] ).Count )
+		   )
+	   )
+
+SELECT
+	{ [Measures].[Order Count],
+	  [Measures].[Proof],
+	  [Measures].[Average of an average] } ON 0,
+	NON EMPTY	  
+	{ 
+	  Descendants( [Date].[Fiscal Weeks].[All Periods],
+				   1 , SELF_AND_BEFORE) } ON 1
+FROM
+	[Adventure Works]

@@ -1,0 +1,7 @@
+SELECT
+	{ [Measures].[Internet Sales Amount] } ON 0,
+	NON EMPTY
+	{ Descendants( [Product].[Product Categories].[Category],
+				   1, SELF ) } ON 1
+FROM
+	[Adventure Works]

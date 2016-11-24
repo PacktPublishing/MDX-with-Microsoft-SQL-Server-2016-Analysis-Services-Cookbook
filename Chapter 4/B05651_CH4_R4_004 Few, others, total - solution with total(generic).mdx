@@ -1,0 +1,18 @@
+'
+WITH   
+SET [Top 5] AS
+	TopCount( ' + @LevelUniqueName + '.MEMBERS,
+			   5,
+			  [Measures].[Reseller Sales Amount] )
+MEMBER ' + @HierarchyUniqueName + '.[All].[Other] AS
+	Aggregate( - [Top 5] )
+MEMBER ' + @HierarchyUniqueName + '.[All].[Total] AS
+	' + @HierarchyUniqueName + '.[All]
+SELECT
+	{ [Measures].[Reseller Sales Amount] } ON 0,
+	{ [Top 5],
+	  ' + @HierarchyUniqueName + '.[All].[Other],
+	  ' + @HierarchyUniqueName + '.[All].[Total] } ON 1
+FROM
+	[Adventure Works]
+'

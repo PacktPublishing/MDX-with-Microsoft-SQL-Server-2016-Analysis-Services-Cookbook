@@ -1,0 +1,5 @@
+SELECT
+	{ [Measures].[Customer Count] } ON 0,
+	{ [Date].[Calendar].[Calendar Quarter].MEMBERS } ON 1
+FROM
+	[Adventure Works]

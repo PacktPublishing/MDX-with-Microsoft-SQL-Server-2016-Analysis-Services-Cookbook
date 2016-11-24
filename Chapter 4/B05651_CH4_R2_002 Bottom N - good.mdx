@@ -1,0 +1,13 @@
+WITH   
+SET [Bottom 5 Resellers] AS
+	BottomCount( 
+		NonEmpty( [Reseller].[Reseller].[Reseller].MEMBERS,
+				  [Measures].[Reseller Sales Amount] ),
+			      5,
+			     [Measures].[Reseller Sales Amount] )
+SELECT
+	{ [Measures].[Reseller Sales Amount] } ON 0,
+	{ [Bottom 5 Resellers] } ON 1
+FROM
+	[Adventure Works]
+

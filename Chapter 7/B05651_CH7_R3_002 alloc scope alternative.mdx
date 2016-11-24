@@ -1,0 +1,23 @@
+Create Member CurrentCube.[Measures].[Amount preserve]
+As [Measures].[Amount]
+, Format_String = '$#,##0.00'
+, Associated_Measure_Group = 'Financial Reporting' ; 
+
+Freeze( ( [Measures].[Amount preserve] ) );
+
+Scope( ( [Measures].[Amount],
+         [Department].[Departments].[Department Level 02].MEMBERS,
+         Descendants( [Account].[Accounts].&[58] ) ) );
+    This = [Measures].[Amount preserve] +
+           ( [Department].[Departments].&[1].DATAMEMBER,
+             [Measures].[Amount preserve] ) *
+           ( [Department].[Departments].CurrentMember,
+             [Measures].[Amount preserve] ) /
+           Aggregate(
+             Except( [Department].[Departments].[Department Level 02].MEMBERS,
+                     [Department].[Departments].&[1].DATAMEMBER ), 
+             [Measures].[Amount preserve] );
+    Scope( [Department].[Departments].&[1].DATAMEMBER );
+        This = null;
+    End Scope;
+End Scope;

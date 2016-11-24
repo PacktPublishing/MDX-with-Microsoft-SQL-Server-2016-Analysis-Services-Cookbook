@@ -1,0 +1,11 @@
+WITH
+SET [Ordered Resellers] AS
+	Order( [Reseller].[Reseller].[Reseller].MEMBERS,
+	       [Measures].[Reseller Sales Amount],
+	       BDESC )
+SELECT
+	{ [Measures].[Reseller Sales Amount] } ON 0,
+	{ [Ordered Resellers] } ON 1
+FROM
+	[Adventure Works]
+	

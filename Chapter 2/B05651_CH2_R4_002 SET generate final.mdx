@@ -1,0 +1,18 @@
+WITH   
+SET [Best month per year] AS
+	Generate( [Date].[Calendar].[Calendar Year].MEMBERS,
+			  TopCount(
+				Descendants( [Date].[Calendar].CurrentMember,
+			                 [Date].[Calendar].[Month],
+			                 SELF ),
+			    1,
+			    [Measures].[Sales Amount] )
+		    )
+SELECT
+	NON EMPTY
+	{ [Best month per year] *
+	  [Measures].[Sales Amount] } ON 0,
+	NON EMPTY
+	{ [Sales Territory].[Sales Territory Country].MEMBERS } ON 1
+FROM
+	[Adventure Works]

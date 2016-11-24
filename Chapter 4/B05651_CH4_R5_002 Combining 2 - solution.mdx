@@ -1,0 +1,15 @@
+WITH
+MEMBER [Date].[Month of Year].[All Periods].[Last week] AS
+  	 ( [Date].[Calendar Week of Year].&[48],
+  	   [Date].[Month of Year].[All Periods] )
+SELECT
+	{ [Measures].[Reseller Sales Amount] } ON 0,
+	NON EMPTY
+	{ [Date].[Month of Year].[Month of Year].MEMBERS,
+	  [Date].[Month of Year].[All Periods].[Last week] } ON 1  
+FROM
+	[Adventure Works]
+WHERE
+	( [Date].[Calendar Year].&[2013] )
+
+

@@ -1,0 +1,6 @@
+SELECT
+	{ [Measures].[Sales] } ON 0,
+	{ Descendants( [Date].[Calendar].[Calendar Year].&[2012],
+		           [Date].[Calendar].[Month] ) } ON 1
+FROM
+	[Adventure Works]

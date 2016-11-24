@@ -1,0 +1,16 @@
+SELECT
+	{ [Measures].[Internet Order Count],
+	  [Measures].[Internet Order Quantity],
+	  [Measures].[Internet Sales Amount],
+	  [Measures].[Internet Gross Profit],
+	  [Measures].[Internet Gross Profit Margin],
+	  [Measures].[Internet Average Sales Amount],
+	  [Measures].[Internet Average Unit Price] } ON 0,
+	{ Exists( [Loyal Customers],
+	          ( [Measures].[Customer Count],
+	            [Date].[Calendar].[Calendar Quarter].&[2013]&[2] ),
+	          'Internet Customers' ) } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Date].[Calendar].[Calendar Quarter].&[2012]&[4] )	

@@ -1,0 +1,16 @@
+WITH   
+MEMBER [Measures].[Positive growth days] AS
+	SUM(
+		Descendants([Date].[Fiscal].CurrentMember, , leaves),
+		IIF( [Measures].[Growth in Customer Base] > 0, 1, null)
+		)
+SELECT
+	{ [Measures].[Customer Count],
+	  [Measures].[Growth in Customer Base],
+	  [Measures].[Positive growth days] } ON 0,
+	NON EMPTY
+	{ [Date].[Fiscal].[Month].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Product].[Product Categories].[Subcategory].&[1] )

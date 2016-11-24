@@ -1,0 +1,8 @@
+<Batch xmlns = "http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ClearCache>
+    <Object>
+      <DatabaseID></DatabaseID>
+      <CubeID></CubeID>
+    </Object>
+  </ClearCache>
+</Batch>

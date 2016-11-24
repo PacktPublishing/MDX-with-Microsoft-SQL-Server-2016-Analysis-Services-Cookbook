@@ -1,0 +1,39 @@
+WITH
+MEMBER [Measures].[Sales Amount $] AS
+	[Measures].[Sales Amount],
+	BACK_COLOR = RGB(255, 255, 200)
+SELECT
+	NON EMPTY
+	{ [Date].[Fiscal].[Fiscal Year].MEMBERS } *
+	{ [Measures].[Sales Amount $],
+      [Measures].[Gross Profit Margin] } ON 0,
+	NON EMPTY
+	{ [Sales Territory].[Sales Territory Country].[Sales Territory Country].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+CELL PROPERTIES	
+	VALUE,
+	FORMATTED_VALUE,
+	BACK_COLOR
+	
+GO
+
+WITH
+MEMBER [Measures].[Sales Amount $] AS
+	[Measures].[Sales Amount],
+	BACK_COLOR = RGB(255, 255, 200)
+SELECT
+	NON EMPTY
+	Hierarchize(
+		ASSP.InverseHierarchility(
+	{ [Date].[Fiscal].[Fiscal Year].MEMBERS } *
+	{ [Measures].[Sales Amount $],
+	  [Measures].[Gross Profit Margin] } ) ) ON 0,
+	NON EMPTY
+	{ [Sales Territory].[Sales Territory Country].[Sales Territory Country].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+CELL PROPERTIES	
+	VALUE,
+	FORMATTED_VALUE,
+	BACK_COLOR

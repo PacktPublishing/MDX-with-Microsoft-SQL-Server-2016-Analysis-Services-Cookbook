@@ -1,0 +1,10 @@
+SELECT
+	{ [Measures].[Reseller Sales Amount],
+	  [Measures].[Reseller Gross Profit Margin] } ON 0,
+	NON EMPTY
+	{ Descendants( [Product].[Product Categories].[Category],
+				   1, BEFORE ) } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Date].[Fiscal].[Fiscal Year].&[2013] )

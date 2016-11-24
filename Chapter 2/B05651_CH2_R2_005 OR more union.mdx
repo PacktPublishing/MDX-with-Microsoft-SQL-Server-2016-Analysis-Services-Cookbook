@@ -1,0 +1,17 @@
+// OR logic: Union(Set_Expression1, Set_Expression2)
+SELECT
+	{ [Measures].[Reseller Order Quantity],
+	  [Measures].[Reseller Order Count] } ON 0,
+	NON EMPTY
+	{ [Product].[Subcategory].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( Union (
+		{ ( [Product].[Color].&[Black],
+			[Product].[Size Range].[All Products] ) }
+		,
+		{  ( [Product].[Color].[All Products],
+			[Product].[Size Range].&[XL] ) }
+	  )
+	)	 

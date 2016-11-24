@@ -1,0 +1,28 @@
+Create Member CurrentCube.[Measures].[Agg TD] AS
+	Aggregate( null : [Date].[Calendar].CurrentMember,
+	           [Measures].[Customer Count] )
+    , Format_String = '#,#'
+    , Visible = 0
+    , Associated_Measure_Group = 'Internet Customers'; 
+
+Create Member CurrentCube.[Measures].[Agg TD prev] AS
+	Aggregate( null : [Date].[Calendar].PrevMember,
+	           [Measures].[Customer Count] )
+    , Format_String = '#,#'
+    , Visible = 0
+    , Associated_Measure_Group = 'Internet Customers'; 
+
+Create Member CurrentCube.[Measures].[Lost Customers] AS
+	[Measures].[Agg TD] - [Measures].[Customer Count]
+    , Format_String = '#,#'
+    , Associated_Measure_Group = 'Internet Customers'; 
+
+Create Member CurrentCube.[Measures].[New Customers] AS
+	[Measures].[Agg TD] - [Measures].[Agg TD prev]
+    , Format_String = '#,#'
+    , Associated_Measure_Group = 'Internet Customers'; 
+
+Create Member CurrentCube.[Measures].[Loyal Customers] AS
+	[Measures].[Customer Count] - [Measures].[New Customers]
+    , Format_String = '#,#'
+    , Associated_Measure_Group = 'Internet Customers'; 

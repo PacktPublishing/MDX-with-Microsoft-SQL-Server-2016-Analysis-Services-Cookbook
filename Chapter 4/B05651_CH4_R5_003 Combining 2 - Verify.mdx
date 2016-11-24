@@ -1,0 +1,11 @@
+-- why the November data is the same as last week
+SELECT
+	{ [Measures].[Reseller Sales Amount] } ON 0,
+	--NON EMPTY
+	{  [Date].[Date].[Date].MEMBERS *
+	   [Date].[Calendar Week of Year].[Calendar Week of Year].MEMBERS
+	   } ON 1  
+FROM
+	[Adventure Works]
+WHERE
+	( [Date].[Calendar Year].&[2013] )

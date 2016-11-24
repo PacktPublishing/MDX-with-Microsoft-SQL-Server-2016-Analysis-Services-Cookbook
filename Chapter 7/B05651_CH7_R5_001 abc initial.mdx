@@ -1,0 +1,9 @@
+SELECT
+	{ [Measures].[Internet Gross Profit] } ON 0,
+	NON EMPTY
+	{ [Product].[Product].[Product].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Product].[Status].&[Current],
+	  [Date].[Calendar Year].&[2012] )

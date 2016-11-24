@@ -1,0 +1,13 @@
+SELECT
+	{ [Scenario].[Scenario].[Scenario].ALLMEMBERS } *
+	{ [Measures].[Amount] } ON 0,
+	{ [Department].[Departments].MEMBERS } ON 1
+FROM
+	[Adventure Works]	
+WHERE
+	( [Date].[Calendar].[Calendar Year].&[2011] )
+CELL PROPERTIES
+	VALUE,
+	FORMATTED_VALUE,
+	FORE_COLOR,
+	BACK_COLOR	

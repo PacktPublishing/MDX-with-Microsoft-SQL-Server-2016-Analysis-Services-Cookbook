@@ -1,0 +1,6 @@
+select * from 
+SystemRestrictSchema(
+         $system.DISCOVER_DIMENSION_STAT,
+			DATABASE_NAME='Adventure Works DW 2016',
+			DIMENSION_NAME='Customer') 
+order by ATTRIBUTE_NAME

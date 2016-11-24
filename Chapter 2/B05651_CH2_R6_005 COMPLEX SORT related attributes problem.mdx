@@ -1,0 +1,16 @@
+SELECT
+	NON EMPTY
+	{ [Product].[Product Line].[Product Line].MEMBERS *
+	  [Measures].[Sales Amount] } ON 0,
+	NON EMPTY
+	{ Generate(
+		[Sales Territory].[Sales Territory Country].[Sales Territory Country].MEMBERS,
+	    [Sales Territory].[Sales Territory Country].CurrentMember *
+	    Order( [Product].[Model Name].[Model Name].MEMBERS,
+	         ( [Product].[Product Line].&[M],
+--	           [Product].[Model Name].CurrentMember,
+	           [Measures].[Sales Amount] ),
+	          BDESC ) 
+	          ) } ON 1
+FROM
+	[Adventure Works]

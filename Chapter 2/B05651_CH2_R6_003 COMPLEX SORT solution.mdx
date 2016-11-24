@@ -1,0 +1,15 @@
+SELECT
+	NON EMPTY
+	{ [Date].[Fiscal].[Fiscal Year].MEMBERS *
+	  [Measures].[Sales Amount] } ON 0,
+	NON EMPTY
+	{ Generate(
+		[Sales Territory].[Sales Territory Country].[Sales Territory Country].MEMBERS,
+	    [Sales Territory].[Sales Territory Country].CurrentMember *
+	    Order( [Product].[Color].[Color].MEMBERS,
+	         ( [Date].[Fiscal].[Fiscal Year].&[2013],
+	           [Measures].[Sales Amount] ),
+	          BDESC ) 
+	          ) } ON 1
+FROM
+	[Adventure Works]

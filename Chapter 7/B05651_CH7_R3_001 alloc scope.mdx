@@ -1,0 +1,22 @@
+
+Create Member CurrentCube.[Measures].[Amount alloc]
+As [Measures].[Amount]
+, Format_String = '$#,##0.00'
+, Associated_Measure_Group = 'Financial Reporting' ; 
+
+Scope( ( [Measures].[Amount alloc],
+         [Department].[Departments].[Department Level 02].MEMBERS,
+         Descendants( [Account].[Accounts].&[58] ) ) );
+    This = [Measures].[Amount] +
+           ( [Department].[Departments].&[1].DATAMEMBER,
+             [Measures].[Amount] ) *
+           ( [Department].[Departments].CurrentMember,
+             [Measures].[Amount] ) /
+           Aggregate(
+             Except( [Department].[Departments].[Department Level 02].MEMBERS,
+                     [Department].[Departments].&[1].DATAMEMBER ),
+             [Measures].[Amount] );
+    Scope( [Department].[Departments].&[1].DATAMEMBER );
+        This = null;
+    End Scope;
+End Scope;

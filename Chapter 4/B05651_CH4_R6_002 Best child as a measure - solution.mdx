@@ -1,0 +1,21 @@
+WITH   
+MEMBER [Measures].[Best child] AS
+	iif( IsLeaf( [Product].[Product Categories]
+                 .CurrentMember ),
+	     null,
+	     iif( IsEmpty([Measures].[Internet Sales Amount] ),
+              null,
+              TopCount( [Product].[Product Categories]
+                        .CurrentMember.Children,
+	                    1, [Measures].[Internet Sales Amount] 
+                      ).Item(0).Name
+           )
+	   )
+SELECT
+	{ [Measures].[Internet Sales Amount],
+	  [Measures].[Best child] } ON 0,
+	NON EMPTY
+	{ Descendants( [Product].[Product Categories].[Category],
+  				   1, SELF ) } ON 1
+FROM
+	[Adventure Works]

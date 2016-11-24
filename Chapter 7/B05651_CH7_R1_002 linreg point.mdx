@@ -1,0 +1,25 @@
+WITH
+SET [Full Period] AS
+	{ [Date].[Calendar].[Month].&[2011]&[1] : [Date].[Calendar].[Month].&[2014]&[12] }
+SET [Input Period] AS
+	{ [Date].[Calendar].[Month].&[2011]&[1] : [Date].[Calendar].[Month].&[2013]&[12] }
+MEMBER [Measures].[Input X] AS
+	Rank( [Date].[Calendar].CurrentMember, [Input Period] )	
+MEMBER [Measures].[Input Y] AS
+	[Measures].[Sales Amount]
+MEMBER [Measures].[Output X] AS
+	Rank( [Date].[Calendar].CurrentMember, [Full Period] )	
+MEMBER [Measures].[Forecast] AS // = Output Y
+	LinRegPoint(
+		[Measures].[Output X],
+		           [Input Period],
+		[Measures].[Input Y],
+		[Measures].[Input X]
+		)
+		, FORMAT_STRING = '$#,##0.00'
+SELECT
+	{ [Measures].[Sales Amount],
+	  [Measures].[Forecast] } ON 0,
+	{ [Full Period] } ON 1
+FROM
+	[Adventure Works]

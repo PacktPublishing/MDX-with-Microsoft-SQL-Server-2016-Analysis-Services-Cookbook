@@ -1,0 +1,52 @@
+WITH
+MEMBER [Measures].[Sales PP] AS
+	( ParallelPeriod( [Date].[Calendar].[Calendar Year], 1, 
+					  [Date].[Calendar].CurrentMember ),
+	  [Measures].[Sales] )	
+		, FORMAT_STRING = '$#,##0.00'
+MEMBER [Measures].[Sales YTD] AS
+	Sum(
+		PeriodsToDate( [Date].[Calendar].[Calendar Year], 
+					   [Date].[Calendar].CurrentMember ),
+		[Measures].[Sales] )	
+		, FORMAT_STRING = '$#,##0.00'			
+MEMBER [Measures].[Sales PP YTD] AS
+	Sum(
+		PeriodsToDate( [Date].[Calendar].[Calendar Year], 
+					   ParallelPeriod( [Date].[Calendar].[Calendar Year], 1, 
+									   Tail( NonEmpty( { null : [Date].[Calendar].CurrentMember },
+					                   [Measures].[Sales] ), 1 ).Item(0) ) ),
+		[Measures].[Sales] )	
+		, FORMAT_STRING = '$#,##0.00'		
+MEMBER [Measures].[Ratio] AS
+	iif([Measures].[Sales PP YTD] = 0,
+		null,
+		[Measures].[Sales YTD] / [Measures].[Sales PP YTD] )
+		, FORMAT_STRING = '#,##0.00'
+MEMBER [Measures].[Forecast] AS
+	iif( IsEmpty( [Measures].[Sales] ), 
+		 [Measures].[Ratio] * [Measures].[Sales PP],
+		 null )
+		, FORMAT_STRING = '$#,##0.00'
+MEMBER [Measures].[Forecast YTD] AS
+	iif( IsEmpty( [Measures].[Sales] ),
+		Sum(
+			PeriodsToDate( [Date].[Calendar].[Calendar Year], 
+						   [Date].[Calendar].CurrentMember ),
+			[Measures].[Sales] +
+			[Measures].[Forecast] ),
+		null )
+		, FORMAT_STRING = '$#,##0.00'		
+SELECT
+	{ [Measures].[Sales],
+	  [Measures].[Sales PP],
+	  [Measures].[Sales YTD],
+	  [Measures].[Sales PP YTD],
+	  [Measures].[Ratio],
+	  [Measures].[Forecast],
+	  [Measures].[Forecast YTD]
+    } ON 0,
+	{ Descendants( [Date].[Calendar].[Calendar Year].&[2012],
+		           [Date].[Calendar].[Month] ) } ON 1
+FROM
+	[Adventure Works]

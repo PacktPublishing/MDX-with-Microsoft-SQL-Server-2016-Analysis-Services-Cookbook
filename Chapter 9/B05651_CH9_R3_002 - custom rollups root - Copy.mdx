@@ -1,0 +1,30 @@
+Create Member CurrentCube.[Measures].[MDX Formula]
+As
+    [Reporting Dimension].[Hierarchy].CurrentMember.Properties('MDX Formula')
+
+    ,Visible = 0
+    ,Display_Folder = 'Reporting Measures'; 
+
+Create Member CurrentCube.[Measures].[Value]
+As
+	null
+
+    ,Visible = 1
+    ,Display_Folder = 'Reporting Measures'; 
+
+Scope( [Measures].[Value] );
+        Scope( [Reporting Dimension].[Hierarchy].Members );
+            This = iif( [Measures].[MDX Formula] = '', null,
+ 			     StrToValue( 'Sum( [Reporting Dimension].[Hierarchy].[All], ' + 
+                             [Reporting Dimension].[Hierarchy].CurrentMember.Properties('MDX Formula') +
+                             ' )'
+						   )
+					  );
+        End Scope;
+    Scope( Root( [Reporting Dimension] ) );
+        This = null;
+    End Scope;
+    Scope( Root( [Date] ) );
+        This = null;
+    End Scope;
+End Scope;

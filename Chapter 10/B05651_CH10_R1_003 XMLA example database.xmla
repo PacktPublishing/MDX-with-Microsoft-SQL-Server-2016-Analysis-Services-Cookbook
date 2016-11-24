@@ -1,0 +1,7 @@
+<Batch xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ClearCache>
+    <Object>
+      <DatabaseID>Adventure Works DW 2016</DatabaseID>
+    </Object>
+  </ClearCache>
+</Batch>

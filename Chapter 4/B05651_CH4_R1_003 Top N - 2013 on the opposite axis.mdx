@@ -1,0 +1,11 @@
+WITH   
+SET [Top 5 Resellers] AS
+ TopCount( [Reseller].[Reseller].[Reseller].MEMBERS,
+		   5,
+		   [Measures].[Reseller Sales Amount] )
+SELECT
+ { [Measures].[Reseller Sales Amount] } *
+ { [Date].[Calendar Year].&[2007] } ON 0,
+ { [Top 5 Resellers] } ON 1
+FROM
+	[Adventure Works]

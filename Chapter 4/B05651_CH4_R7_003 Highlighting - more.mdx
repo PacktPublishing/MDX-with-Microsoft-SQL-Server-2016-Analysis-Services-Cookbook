@@ -1,0 +1,64 @@
+WITH   
+MEMBER [Measures].[Category] AS
+	iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+	     null,
+	     [Product].[Product Categories].CurrentMember.Parent.Name )
+MEMBER [Measures].[Rank in siblings] AS
+	iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+	     null,
+		 Rank( [Product].[Product Categories].CurrentMember,
+		       NonEmpty( [Product].[Product Categories]
+					     .CurrentMember.Siblings,
+						 [Measures].[Internet Sales Amount] ),
+			   [Measures].[Internet Sales Amount] )
+	   )
+MEMBER [Measures].[Count of siblings] AS
+	Sum( [Product].[Product Categories]
+		 .CurrentMember.Siblings,
+		 iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+	     null, 1 )
+	   )
+MEMBER [Measures].[R] AS
+	iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+	     null,
+		 255 / ( [Measures].[Count of siblings] - 1 ) *
+		 ( [Measures].[Count of siblings] -  
+           [Measures].[Rank in siblings] ) ) -- all shades
+	, FORMAT_STRING = '#,#'    
+	, VISIBLE = 1            
+MEMBER [Measures].[G] AS
+	iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+	     null, 0 ) -- fixed dark green
+	, VISIBLE = 1            
+MEMBER [Measures].[B] AS
+	iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+	     null,
+		 100 / [Measures].[Count of siblings] *
+		 [Measures].[Rank in siblings] ) -- dark shades
+	, FORMAT_STRING = '#,#'                
+	, VISIBLE = 1            
+CELL CALCULATION [Highlighted Amount]
+FOR '{ [Measures].[Internet Sales Amount] }' AS
+	[Measures].[Internet Sales Amount]
+	, BACK_COLOR = 
+	      RGB( [Measures].[R],
+		       [Measures].[G],
+		       [Measures].[B] )
+	, FORE_COLOR = RGB( 255, 255, 255 ) -- white
+SELECT
+	{ [Measures].[Category],
+	  [Measures].[Rank in siblings],
+  	  [Measures].[Internet Sales Amount],
+  	  [Measures].[R],
+  	  [Measures].[G],
+  	  [Measures].[B] } ON 0,
+	NON EMPTY
+	{ Descendants( [Product].[Product Categories].[Category],
+		  		   1, SELF ) } ON 1
+FROM
+	[Adventure Works]
+CELL PROPERTIES
+	VALUE,
+	FORMATTED_VALUE,
+	FORE_COLOR,
+	BACK_COLOR

@@ -1,0 +1,8 @@
+SELECT
+	{ [Measures].[Reseller Sales Amount] } ON 0,
+	NON EMPTY
+	{ [Date].[Calendar].[Month].MEMBERS } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Date].[Calendar Year].&[2013] )

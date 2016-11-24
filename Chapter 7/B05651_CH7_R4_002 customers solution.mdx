@@ -1,0 +1,23 @@
+WITH
+MEMBER [Measures].[Agg TD] AS
+	Aggregate( null : [Date].[Calendar].CurrentMember,
+	           [Measures].[Customer Count] )
+MEMBER [Measures].[Agg TD prev] AS
+	Aggregate( null : [Date].[Calendar].PrevMember,
+	           [Measures].[Customer Count] )
+MEMBER [Measures].[Lost Customers] AS
+	[Measures].[Agg TD] - [Measures].[Customer Count]
+MEMBER [Measures].[New Customers] AS
+	[Measures].[Agg TD] - [Measures].[Agg TD prev]
+MEMBER [Measures].[Loyal Customers] AS
+	[Measures].[Customer Count] - [Measures].[New Customers]
+SELECT
+	{ [Measures].[Customer Count],
+	  [Measures].[Agg TD],
+	  [Measures].[Agg TD prev],
+	  [Measures].[Lost Customers],
+	  [Measures].[New Customers],
+	  [Measures].[Loyal Customers] } ON 0,
+	{ [Date].[Calendar].[Calendar Quarter].MEMBERS } ON 1
+FROM
+	[Adventure Works]

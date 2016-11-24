@@ -1,0 +1,23 @@
+WITH
+SET [Loyal Customers] AS
+	NonEmpty( [Customer].[Customer].[Customer].MEMBERS,
+		      [Measures].[Customer Count] ) -
+	(
+		NonEmpty( [Customer].[Customer].[Customer].MEMBERS,
+				  [Measures].[Agg TD] ) -
+		NonEmpty( [Customer].[Customer].[Customer].MEMBERS,
+				  [Measures].[Agg TD prev] )
+	)
+SELECT
+	{ [Measures].[Internet Order Count],
+	  [Measures].[Internet Order Quantity],
+	  [Measures].[Internet Sales Amount],
+	  [Measures].[Internet Gross Profit],
+	  [Measures].[Internet Gross Profit Margin],
+	  [Measures].[Internet Average Sales Amount],
+	  [Measures].[Internet Average Unit Price] } ON 0,
+	{ [Loyal Customers] } ON 1
+FROM
+	[Adventure Works]
+WHERE
+	( [Date].[Calendar].[Calendar Quarter].&[2012]&[4] )
