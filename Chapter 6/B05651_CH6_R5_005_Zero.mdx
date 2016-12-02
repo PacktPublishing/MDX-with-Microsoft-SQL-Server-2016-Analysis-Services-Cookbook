@@ -1,0 +1,5 @@
+SET [Profit] AS
+	{ IIF([Measures].[Internet Gross Profit] = 0, NULL, [Measures].[Internet Gross Profit]),
+	  IIF([Measures].[Reseller Gross Profit] = 0, NULL, [Measures].[Reseller Gross Profit]),
+	  IIF([Measures].[Gross Profit] = 0, NULL, [Measures].[Gross Profit])
+	}

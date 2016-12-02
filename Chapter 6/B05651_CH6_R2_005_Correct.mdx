@@ -1,0 +1,9 @@
+SELECT	[Measures].[Reseller Sales Amount] ON COLUMNS,
+		NON EMPTY 
+		[Date].[Calendar Date].[Date] *
+		[Reseller].[Reseller].[Reseller] 
+		 ON ROWS
+FROM
+	[Adventure Works] 
+WHERE
+	STRTOMEMBER('[Date].[Date].&[20130901]', CONSTRAINED) : STRTOMEMBER('[Date].[Date].&[20131224]', CONSTRAINED)

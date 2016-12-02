@@ -1,0 +1,19 @@
+Create MEMBER CurrentCube.[Measures].[RO Frequency Total] AS
+     ( [Measures].[RO Frequency],
+       [Reseller Order Frequency].[Interval].DefaultMember )
+  , Visible = 0
+  , Format_String = '#,#'
+  , Associated_Measure_Group = 'Reseller Orders'
+  , Display_Folder = 'Histograms'
+  ; 
+
+Create MEMBER CurrentCube.[Measures].[RO Frequency %] AS
+    iif( [Measures].[RO Frequency Total] = 0,
+         null,
+         [Measures].[RO Frequency] /
+         [Measures].[RO Frequency Total]
+       )
+  , Format_String = 'Percent'
+  , Associated_Measure_Group = 'Reseller Orders'
+  , Display_Folder = 'Histograms'
+  ;

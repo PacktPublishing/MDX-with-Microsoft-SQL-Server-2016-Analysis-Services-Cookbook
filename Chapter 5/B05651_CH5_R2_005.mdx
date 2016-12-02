@@ -1,0 +1,7 @@
+MEMBER [Measures].[Root member detected] AS
+   iif( [Product].[Color].CurrentMember Is
+        Extract(Root([Product]),
+[Product].[Color]).item(0),
+        True,
+        null
+      )

@@ -1,0 +1,13 @@
+WITH
+MEMBER [Measures].[Level] AS
+   [Sales Territory].[Sales Territory]
+   .CurrentMember.Level.Ordinal
+SELECT
+   { [Measures].[Level],
+     [Measures].[Reseller Sales Amount] } ON 0,
+   { [Sales Territory].[Sales Territory].AllMembers } ON 1
+FROM
+   [Adventure Works]
+
+
+

@@ -1,0 +1,11 @@
+WITH
+MEMBER [Measures].[Start Time] AS
+   CDate('2013-09-18 00:40:00')
+MEMBER [Measures].[End Time] AS
+   CDate('2013-09-21 10:27:00')
+MEMBER [Measures].[Duration in days] AS
+   [Measures].[End Time] - [Measures].[Start Time]
+SELECT
+   { [Measures].[Duration in days] } ON 0
+FROM
+   [Adventure Works]

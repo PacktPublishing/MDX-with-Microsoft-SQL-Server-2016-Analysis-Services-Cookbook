@@ -1,0 +1,9 @@
+WITH MEMBER [Measures].[ParameterValue] AS
+	[Date].[Calendar].CurrentMember.uniquename
+
+SELECT
+	{[Measures].[ParameterValue]} ON COLUMNS,
+	[Date].[Calendar].[Month].MEMBERS
+	ON ROWS
+FROM
+	[Adventure Works]

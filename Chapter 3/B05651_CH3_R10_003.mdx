@@ -1,0 +1,3 @@
+MEMBER [Measures].[Duration in hours] AS
+   ([Measures].[End Time] - [Measures].[Start Time]) * 24
+   , FORMAT_STRING = '#,##0.0'

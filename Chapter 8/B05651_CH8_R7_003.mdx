@@ -1,0 +1,82 @@
+Scope( [Time Calcs].[Calc].[Prev period] );
+       -- user hierarchies, complete
+    Scope( [Date].[Calendar].MEMBERS,
+           [Date].[Calendar Weeks].MEMBERS );
+          -- previous member exists? (null for "no")
+        This = iif( Count( LastPeriods( 2, [Date].[Calendar]
+                                                 .CurrentMember ) *
+                           LastPeriods( 2, [Date].[Calendar Weeks]
+                                                 .CurrentMember )
+                         ) <= 1,
+                    null,
+                     -- include one member to the left on each 
+                     -- hierarchy and see what comes out as the
+                     -- intersection, then deduct the value in
+                     -- the current context from it
+                    Aggregate( 
+                       LastPeriods( 2, [Date].[Calendar]
+                                             .CurrentMember ) *
+                       LastPeriods( 2, [Date].[Calendar Weeks]
+                                             .CurrentMember ),
+                       [Time Calcs].[Calc].&[0]
+                             ) -
+                    [Time Calcs].[Calc].&[0]
+                  );
+    End Scope;
+       -- attribute hierarchies directly related to year level
+    Scope( [Date].[Calendar Year].[Calendar Year].MEMBERS );
+          -- previous member exists? (test prev year for "no")
+        This = iif( Count( 
+                 LastPeriods( 2, [Date].[Calendar Semester of Year]
+                                       .CurrentMember ) *
+                 LastPeriods( 2, [Date].[Calendar Quarter of Year]
+                                       .CurrentMember ) *
+                 LastPeriods( 2, [Date].[Month of Year]
+                                       .CurrentMember ) *
+                 LastPeriods( 2, [Date].[Calendar Week of Year]
+                                       .CurrentMember ) *
+                 LastPeriods( 2, [Date].[Day of Year]
+                                       .CurrentMember ) *
+                 LastPeriods( 2, [Date].[Date]
+                                       .CurrentMember ) ) <= 1,
+                   -- previous year exists? (null for "no")
+                 iif( Count( LastPeriods( 2, [Date].[Calendar Year]
+                                                   .CurrentMember )
+                           ) <= 1,
+                     null,
+                      -- members shift in circle
+                      -- from the first position to the last
+                      -- hence we need the previous year
+                    (
+                     [Date].[Calendar Year].PrevMember,
+                     [Date].[Calendar Semester of Year].LastSibling,
+                     [Date].[Calendar Quarter of Year].LastSibling,
+                     [Date].[Month of Year].LastSibling,
+                     [Date].[Calendar Week of Year].LastSibling,
+                     [Date].[Day of Year].LastSibling,
+                     [Date].[Date].LastSibling,
+                     [Time Calcs].[Calc].&[0]
+                    )
+                ),
+                 -- include one member to the left on each 
+                 -- hierarchy and see what comes out as the
+                 -- intersection, then deduct the value in the
+                 -- current context from it
+                Aggregate(
+                   LastPeriods( 2, [Date].[Calendar Semester of Year]
+                                         .CurrentMember ) *
+                   LastPeriods( 2, [Date].[Calendar Quarter of Year]
+                                         .CurrentMember ) *
+                   LastPeriods( 2, [Date].[Month of Year]
+                                         .CurrentMember ) *
+                   LastPeriods( 2, [Date].[Calendar Week of Year]
+                                         .CurrentMember ) *
+                   LastPeriods( 2, [Date].[Day of Year]
+                                         .CurrentMember ) *
+                   LastPeriods( 2, [Date].[Date].CurrentMember ),
+                   [Time Calcs].[Calc].&[0]
+                         ) -
+                [Time Calcs].[Calc].&[0]
+             ); 
+    End Scope;
+End Scope;

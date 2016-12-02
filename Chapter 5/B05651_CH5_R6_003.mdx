@@ -1,0 +1,8 @@
+MEMBER [Measures].[Leaves %] AS
+    [Measures].[Reseller Sales Amount] /
+    Aggregate(
+        Descendants( [Sales Territory].[Sales Territory]
+                                      .[All], ,
+                     leaves ),
+        [Measures].[Reseller Sales Amount] )
+    , FORMAT_STRING = 'Percent'

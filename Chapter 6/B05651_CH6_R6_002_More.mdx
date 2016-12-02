@@ -1,0 +1,8 @@
+SELECT
+	{ [Measures].[Internet Sales Amount],
+	  [Measures].[Internet Gross Profit] } ON COLUMNS,
+NON EMPTY
+		DESCENDANTS({[Product].[Product Categories].[Subcategory].[Tires and Tubes]})
+    ON ROWS
+FROM 
+	[Adventure Works]

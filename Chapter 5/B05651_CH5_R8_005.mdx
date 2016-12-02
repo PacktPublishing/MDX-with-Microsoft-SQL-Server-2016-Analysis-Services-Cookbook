@@ -1,0 +1,25 @@
+WITH
+SET [Color Set] AS
+   [Product].[Color].[Color].Members
+SET [Color Set NonEmpty] AS
+   NonEmpty( [Product].[Color].[Color].Members,
+              { [Measures].[Internet Sales Amount] } )
+MEMBER [Measures].[Level Rank] AS
+   iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+        null,
+        Rank( [Product].[Color].CurrentMember,
+              [Color Set] )
+      )      
+MEMBER [Measures].[Level Rank NonEmpty] AS
+   iif( IsEmpty( [Measures].[Internet Sales Amount] ),
+        null,
+        Rank( [Product].[Color].CurrentMember,
+              [Color Set NonEmpty] )
+      )      
+SELECT
+   { [Measures].[Internet Sales Amount],
+     [Measures].[Level Rank],
+     [Measures].[Level Rank NonEmpty] } ON 0,
+   { [Product].[Color].[Color].Members } ON 1
+FROM
+   [Adventure Works]

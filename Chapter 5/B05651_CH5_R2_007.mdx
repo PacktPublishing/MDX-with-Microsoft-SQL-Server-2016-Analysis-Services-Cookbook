@@ -1,0 +1,5 @@
+Scope( ( [Product].[Color].[All],
+         [Measures].[Internet Sales Amount] ) );
+    This = Avg( [Product].[Color].[All].Children,  
+                [Measures].CurrentMember );
+End Scope;

@@ -1,0 +1,10 @@
+SELECT
+	[Measures].[Reseller Sales Amount] ON COLUMNS,
+	NON EMPTY
+	ORDER (
+		DESCENDANTS([Employee].[Employees].[Employee Level 02],,LEAVES),
+		[Employee].[Employees].MemberValue,
+		BASC)
+	ON ROWS
+FROM
+	[Adventure Works]

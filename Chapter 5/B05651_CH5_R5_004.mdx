@@ -1,0 +1,15 @@
+WITH
+MEMBER [Measures].[Count of SubCategory - SumIIF] AS
+   Sum( [Product].[Subcategory].[Subcategory].MEMBERS,
+        iif( IsEmpty( [Measures].[Reseller Order Count] ),
+             null,
+             1 )
+       )
+SELECT
+   { [Measures].[Count of SubCategory - SumIIF] } ON 0,
+   { TopCount( [Reseller].[Reseller].[Reseller].MEMBERS,
+               100,
+               [Measures].[Reseller Order Count] ) * 
+     [Product].[Subcategory].[Subcategory].MEMBERS } ON 1
+FROM
+   [Adventure Works]

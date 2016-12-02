@@ -1,0 +1,9 @@
+ SELECT
+   { [Measures].[Internet Sales Amount],
+     [Measures].[Internet Gross Profit] 
+   } ON 0,
+   { [Sales Territory].[Sales Territory Country].[Sales Territory Country] *
+     [Product].[Product Categories].[Category]
+   } ON 1
+FROM
+   [Adventure Works]

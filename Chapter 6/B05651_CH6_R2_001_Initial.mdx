@@ -1,0 +1,7 @@
+SELECT	[Measures].[Reseller Sales Amount] ON COLUMNS,
+		NON EMPTY 
+		[Date].[Date].[Date] *
+		[Reseller].[Reseller].[Reseller] 
+		 ON ROWS
+FROM
+	[Adventure Works]

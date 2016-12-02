@@ -1,0 +1,27 @@
+WITH
+MEMBER [Measures].[Start Time] AS
+   CDate('2013-09-18 00:40:00')
+MEMBER [Measures].[End Time] AS
+   CDate('2013-09-21 10:27:00')
+MEMBER [Measures].[Duration in days] AS
+   [Measures].[End Time] - [Measures].[Start Time]
+MEMBER [Measures].[Duration in hours] AS
+   ([Measures].[End Time] - [Measures].[Start Time]) * 24
+   , FORMAT_STRING = '#,##0.0'
+MEMBER [Measures].[My Format] AS
+   iif([Measures].[Duration in days] > 1,
+        CStr(Int([Measures].[Duration in days])) +
+ '"  "', '"0  "')
+   + 'hh:mm:ss'
+
+MEMBER [Measures].[Duration d  hh:mm:ss] AS
+   ([Measures].[End Time] - [Measures].[Start Time])
+   , FORMAT_STRING = [Measures].[My Format]
+
+
+SELECT
+   { [Measures].[Duration in days],
+     [Measures].[Duration in hours],
+	 [Measures].[Duration d  hh:mm:ss] } ON 0
+FROM
+   [Adventure Works]

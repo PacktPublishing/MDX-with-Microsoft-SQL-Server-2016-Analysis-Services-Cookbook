@@ -1,0 +1,12 @@
+MEMBER [Internet Sales PP] As
+   Sum( 
+        Generate(
+            { [Date].[Calendar].[Date].&[20071201] :
+              [Date].[Calendar].[Date].&[20071224] },
+            { ParallelPeriod( [Date].[Calendar]
+                                    .[Calendar Year],
+                              1, 
+                              [Date].[Calendar]
+                                    .CurrentMember.Item(0) )
+            } ),
+        [Measures].[Internet Sales Amount] )

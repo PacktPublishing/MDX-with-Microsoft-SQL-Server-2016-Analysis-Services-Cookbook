@@ -1,0 +1,9 @@
+SELECT
+   [Measures].[Internet Sales Amount] on 0,
+   TopCount(
+      [Customer].[Customer Geography].[Customer].MEMBERS,
+      10,
+      [Measures].[Internet Sales Amount]
+      ) ON 1
+FROM
+   [Adventure Works]

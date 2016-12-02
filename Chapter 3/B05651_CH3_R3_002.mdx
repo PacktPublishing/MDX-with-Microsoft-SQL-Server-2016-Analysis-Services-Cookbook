@@ -1,0 +1,12 @@
+WITH
+MEMBER [Measures].[SMA 30] AS
+Avg( LastPeriods( 30, [Date].[Date].CurrentMember ),
+[Measures].[Internet Order Count] )
+SELECT
+{ [Measures].[Internet Order Count],
+[Measures].[SMA 30] } ON 0,
+{ [Date].[Date].[Date].MEMBERS } ON 1
+FROM
+[Adventure Works]
+WHERE
+( [Date].[Calendar Year].&[2014] )

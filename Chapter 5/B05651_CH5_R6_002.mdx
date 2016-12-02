@@ -1,0 +1,39 @@
+WITH
+MEMBER [Measures].[Level] AS
+   [Sales Territory].[Sales Territory]
+   .CurrentMember.Level.Ordinal
+MEMBER [Measures].[Parent %] AS
+   iif( [Sales Territory].[Sales Territory].CurrentMember Is
+        [Sales Territory].[Sales Territory].[All],
+        1,
+        [Measures].[Reseller Sales Amount] /
+         (
+          [Measures].[Reseller Sales Amount],
+          [Sales Territory].[Sales Territory]
+          .CurrentMember.Parent
+        )
+      ), FORMAT_STRING = 'Percent'
+MEMBER [Measures].[Level %] AS
+        [Measures].[Reseller Sales Amount] /
+   Aggregate( [Sales Territory].[Sales Territory]
+.CurrentMember.Level.Members,
+                   [Measures].[Reseller Sales Amount] )
+    , FORMAT_STRING = 'Percent'
+MEMBER [Measures].[Hierarchy %] AS
+        [Measures].[Reseller Sales Amount] /
+         ( [Sales Territory].[Sales Territory].[All],
+           [Measures].[Reseller Sales Amount] )
+      , FORMAT_STRING = 'Percent'      
+
+SELECT
+   { [Measures].[Level],
+     [Measures].[Reseller Sales Amount],
+	 [Measures].[Parent %],
+	 [Measures].[Level %],
+	 [Measures].[Hierarchy %]
+	} ON 0,
+   { [Sales Territory].[Sales Territory].AllMembers } ON 1
+FROM
+   [Adventure Works]
+
+

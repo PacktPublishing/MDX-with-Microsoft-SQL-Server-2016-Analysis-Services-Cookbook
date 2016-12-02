@@ -1,0 +1,8 @@
+SELECT	[Measures].[Reseller Sales Amount] ON COLUMNS,
+		NON EMPTY 
+		STRTOSET('{[Reseller].[Reseller].&[157], [Reseller].[Reseller].&[199]}', CONSTRAINED)
+		ON ROWS
+FROM 
+	[Adventure Works]
+WHERE
+	STRTOMEMBER('[Date].[Calendar].[Month].&[2013]&[7]', CONSTRAINED)

@@ -1,0 +1,20 @@
+Scope( [Measures].[RO Frequency DSV],
+       [Reseller Order Frequency].[Interval].[Interval].Members,
+       [Reseller].[Reseller].[Reseller].Members
+     );
+    This = iif( [Reseller Order Frequency].[Interval]
+                .CurrentMember.MemberValue =
+                [Measures].[Reseller Order Count],
+                1,
+                null
+             );
+End scope;
+
+Scope( [Measures].[RO Frequency DSV],
+       [Reseller Order Frequency].[Interval].[All Intervals] 
+      );
+    This = Sum( [Reseller Order Frequency].[Interval]
+                .[Interval].MEMBERS,
+                [Measures].[RO Frequency DSV]
+              );
+End Scope;

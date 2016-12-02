@@ -1,0 +1,6 @@
+SET [Yesterday] AS [Today].Item(0).PrevMember
+SET [This Month] AS [Today].Item(0).Parent
+SET [Prev Month] AS [This Month].Item(0).PrevMember
+SET [This Year] AS [Today].Item(0).Parent.Parent.parent.Parent
+SET [Prev Year] AS [This Year].Item(0).PrevMember
+SET [This Month Prev Year] AS [This Month].Item(0).Lag(12)

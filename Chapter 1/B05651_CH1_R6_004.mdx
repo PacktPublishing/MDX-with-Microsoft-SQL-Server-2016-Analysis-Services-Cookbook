@@ -1,0 +1,23 @@
+WITH
+SET [Top 5 Subcategory] AS
+   TopCount (
+       [Product].[Subcategory].children,
+       5,
+       [Measures].[Internet Sales Amount] 
+   )
+MEMBER [Measures].[Subcategory Rank] AS
+    RANK ( 
+       [Product].[Subcategory].CurrentMember, 
+       [Top 5 Subcategory]
+   )
+
+SELECT
+    { [Measures].[Internet Sales Amount],
+      [Measures].[Subcategory Rank]
+    } ON 0,
+    [Top 5 Subcategory] ON 1	
+FROM
+    [Adventure Works]
+WHERE
+    ( [Date].[Calendar].[Calendar Quarter].&[2013]&[1],
+      [Sales Territory].[Sales Territory Region].[Southwest] )

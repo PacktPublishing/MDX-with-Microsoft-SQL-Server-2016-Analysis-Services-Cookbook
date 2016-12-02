@@ -1,0 +1,24 @@
+WITH
+MEMBER [Measures].[Last date] AS
+   Max( [Date].[Date].[Date].MEMBERS,
+        iif( [Measures].[Internet Order Count] = 0,
+             null,
+             [Date].[Date].CurrentMember.MemberValue
+         )
+      )
+MEMBER [Measures].[Last existing date] AS
+   Max( EXISTING [Date].[Date].[Date].MEMBERS,
+        iif( [Measures].[Internet Order Count] = 0,
+             null,
+             [Date].[Date].CurrentMember.MemberValue
+           )
+      )
+SELECT
+   { [Measures].[Internet Order Count],
+     [Measures].[Last date],
+     [Measures].[Last existing date] } ON 0,
+   { [Date].[Calendar Year].MEMBERS } ON 1
+FROM
+   [Adventure Works]
+WHERE
+( [Sales Territory].[Sales Territory Country].&[France]   )

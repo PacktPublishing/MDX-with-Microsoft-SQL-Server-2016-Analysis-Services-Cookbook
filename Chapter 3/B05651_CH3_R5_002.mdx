@@ -1,0 +1,16 @@
+WITH
+MEMBER [Measures].[Value N] AS
+   ( Tail( EXISTING 
+           NonEmpty( [Date].[Date].[Date].MEMBERS,
+                     [Measures].[Internet Order Count] ),
+           1
+         ).Item(0),
+     [Measures].[Internet Order Count] )
+SELECT
+   { [Measures].[Internet Order Count],
+     [Measures].[Value N] } ON 0,
+   { [Date].[Calendar Year].MEMBERS } ON 1
+FROM
+   [Adventure Works]
+WHERE
+( [Sales Territory].[Sales Territory Country].&[France]   )

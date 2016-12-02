@@ -1,0 +1,6 @@
+MEMBER [Measures].[Root member detected] AS
+   iif( [Product].[Color].CurrentMember Is
+        [Product].[Color].[All],
+        True,
+        null
+      )

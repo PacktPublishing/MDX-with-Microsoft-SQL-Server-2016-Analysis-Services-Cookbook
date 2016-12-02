@@ -1,0 +1,26 @@
+Create Hidden SET CurrentCube.[Measures Set] AS
+   Filter( Measures.AllMembers,
+           --MeasureGroupMeasures('Sales Summary'),
+           InStr( Measures.CurrentMember.Name, 'Price' )
+           = 0 AND
+           InStr( Measures.CurrentMember.Name, 'Margin' )
+           = 0 AND
+           InStr( Measures.CurrentMember.Name, 'Percentage' )
+           = 0 AND
+           InStr( Measures.CurrentMember.Name,'Growth' )
+           = 0 AND
+           InStr( Measures.CurrentMember.Name, 'Rate' )
+           = 0 AND
+           InStr( Measures.CurrentMember.Name, 'Ratio' )
+           = 0
+         )
+  ;
+
+Scope( [Display Units Set] );
+    Format_String( [Calculations - Display Units].[Display Unit].&[3]
+                   * [Measures Set] ) = '#,##0,';
+    Format_String( [Calculations - Display Units].[Display Unit].&[6] 
+                   * [Measures Set] ) = '#,##0,,';
+    Format_String( [Calculations - Display Units].[Display Unit].&[9] 
+                   * [Measures Set] ) = '#,##0,,,';
+End Scope;

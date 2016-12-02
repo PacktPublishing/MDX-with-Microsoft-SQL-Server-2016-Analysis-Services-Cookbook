@@ -1,0 +1,5 @@
+Create SET CurrentCube.[RO Frequency Set] AS
+    { null : Tail( NonEmpty( [Frequency]
+                            .[Interval].[Interval].MEMBERS,
+                             [Measures].[RO Frequency] ),
+                   1 ).Item(0)

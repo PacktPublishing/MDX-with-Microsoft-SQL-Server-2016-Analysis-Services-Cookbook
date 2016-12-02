@@ -1,0 +1,11 @@
+WITH
+MEMBER [Measures].[Reseller Sales YTD] AS
+   Sum( YTD( [Date].[Calendar Weeks].CurrentMember ) *
+        YTD( [Date].[Calendar].CurrentMember ),
+        [Measures].[Reseller Sales Amount] )
+SELECT
+   { [Measures].[Reseller Sales Amount],
+     [Measures].[Reseller Sales YTD] } ON 0,
+   { [Date].[Calendar Weeks].[Calendar Week].MEMBERS } ON 1
+FROM
+   [Adventure Works]

@@ -1,0 +1,14 @@
+WITH
+MEMBER [Measures].[Last date] AS
+   Max( [Date].[Date].[Date].MEMBERS,
+      iif( [Measures].[Internet Order Count] = 0,
+           null,
+           [Date].[Date].CurrentMember.MemberValue
+         )
+      )
+SELECT
+   { [Measures].[Internet Order Count],
+     [Measures].[Last date] } ON 0,
+   { [Promotion].[Promotion].MEMBERS } ON 1
+FROM
+   [Adventure Works]

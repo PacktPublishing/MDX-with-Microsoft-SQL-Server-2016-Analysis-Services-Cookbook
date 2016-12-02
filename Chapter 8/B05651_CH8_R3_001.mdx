@@ -1,0 +1,25 @@
+SELECT 0 AS Interval
+UNION ALL
+SELECT
+    TOP(
+        SELECT
+            MAX(Frequency) AS Interval
+        FROM
+            ( SELECT
+                ResellerKey,
+                COUNT(SalesOrderNumber) AS Frequency
+              FROM
+                ( SELECT
+                      DISTINCT
+                      ResellerKey,
+                      SalesOrderNumber
+                  FROM
+                      dbo.FactResellerSales
+                ) AS t1
+              GROUP BY
+                ResellerKey
+            ) AS t2
+       ) ROW_NUMBER()
+       OVER (ORDER BY ResellerKey) AS Interval
+FROM
+    dbo.FactResellerSales

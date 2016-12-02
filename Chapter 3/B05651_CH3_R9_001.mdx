@@ -1,0 +1,8 @@
+SELECT
+   { [Measures].[Reseller Order Count] } ON 0,
+   { [Promotion].[Start Date].[Start Date].MEMBERS *
+     [Promotion].[End Date].[End Date].MEMBERS } ON 1      
+FROM
+   [Adventure Works]
+WHERE
+   ( [Promotion].[Promotion Type].&[Discontinued Product] )

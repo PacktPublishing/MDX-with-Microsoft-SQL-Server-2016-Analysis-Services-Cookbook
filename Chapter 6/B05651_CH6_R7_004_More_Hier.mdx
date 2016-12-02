@@ -1,0 +1,12 @@
+WITH MEMBER [Measures].[ParameterValue] AS
+	[Date].[Calendar].CurrentMember.uniquename
+
+SELECT
+	{[Measures].[ParameterValue]} ON COLUMNS,
+	ORDER (
+		[Date].[Calendar].[Month].MEMBERS,
+		[Measures].[ParameterValue],
+		DESC)
+	ON ROWS
+FROM
+	[Adventure Works]

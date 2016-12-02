@@ -1,0 +1,12 @@
+SELECT
+   { [Measures].[RO Frequency],
+     [Measures].[RO Frequency DSV] 
+   }  ON 0,
+   [Reseller Order Frequency].[Interval].[Interval] ON 1
+FROM
+   (
+          SELECT
+                [Reseller].[Business Type].&[Specialty Bike Shop] ON 0
+          FROM
+                [Adventure Works]
+   )

@@ -1,0 +1,8 @@
+SELECT	[Measures].[Reseller Sales Amount] ON COLUMNS,
+		NON EMPTY 
+		STRTOSET(@Reseller, CONSTRAINED)
+		ON ROWS
+FROM 
+	[Adventure Works]
+WHERE
+	STRTOMEMBER(@Month, CONSTRAINED)

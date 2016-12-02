@@ -1,0 +1,10 @@
+SELECT
+	{[Measures].[Internet Sales Amount]} ON COLUMNS,
+	ORDER (
+		[Date].[Calendar].[Month].MEMBERS,
+		[Measures].[Internet Sales Amount],
+		DESC)
+	ON ROWS
+FROM
+	[Adventure Works]
+

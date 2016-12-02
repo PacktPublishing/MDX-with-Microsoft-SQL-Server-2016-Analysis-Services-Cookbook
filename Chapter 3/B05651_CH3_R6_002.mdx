@@ -1,0 +1,23 @@
+WITH
+MEMBER [Measures].[Caption for Today] AS
+   Format(Now(), 'MMMM dd, yyyy')
+MEMBER [Measures].[Member's Unique Name] AS
+   [Date].[Calendar].CurrentMember.UniqueName
+MEMBER [Measures].[Key for Today] AS
+   Format(Now(), 'yyyyMMdd')
+MEMBER [Measures].[Key for Today (AW)] AS
+   '2013' + Right([Measures].[Key for Today], 4)
+MEMBER [Measures].[Today (string)] AS
+   '[Date].[Calendar].[Date].&[' +
+ [Measures].[Key for Today (AW)] + ']'
+SET [Today] AS
+   StrToMember( [Measures].[Today (string)], CONSTRAINED )
+SELECT
+   { [Measures].[Caption for Today],
+     [Measures].[Member's Unique Name],
+   --[Measures].[Key for Today],
+     [Measures].[Key for Today (AW)],
+     [Measures].[Today (string)] } ON 0,
+   { [Date].[Calendar].[Date].MEMBERS } ON 1
+FROM
+   [Adventure Works]

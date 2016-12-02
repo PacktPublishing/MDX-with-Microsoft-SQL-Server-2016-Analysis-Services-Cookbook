@@ -1,0 +1,4 @@
+MEMBER [Measures].[Reseller Sales YTD] AS
+   Sum( PeriodsToDate( [Date].[Fiscal Weeks].[Fiscal Year],
+                       [Date].[Fiscal Weeks].CurrentMember ),
+        [Measures].[Reseller Sales Amount] )

@@ -1,0 +1,8 @@
+SELECT
+   { [Measures].[Reseller Sales Amount] } ON 0,
+   { ParallelPeriod( [Geography].[Geography].[Country],
+                     2,
+                     [Geography].[Geography].[State-Province]
+                                .&[CA]&[US] ) } ON 1
+FROM
+   [Adventure Works]

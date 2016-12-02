@@ -1,0 +1,8 @@
+SELECT
+   { [Measures].[Reseller Order Count] } ON 0,
+   { TopCount( [Reseller].[Reseller].[Reseller].Members,
+                100,
+               [Measures].[Reseller Order Count] ) * 
+     [Product].[Subcategory].[Subcategory].Members } ON 1
+FROM
+   [Adventure Works]

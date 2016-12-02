@@ -1,0 +1,17 @@
+Scope( [Time Calcs].[Calc].[Prev period i] );
+    This = [Time Calcs].[Calc].&[0] -
+           [Time Calcs].[Calc].[Prev period];
+    Fore_Color(This) = Abs( Measures.CurrentMember < 0 ) * 255;
+End Scope;
+
+Scope( [Time Calcs].[Calc].[Year ago i] );
+    This = [Time Calcs].[Calc].&[0] -
+           [Time Calcs].[Calc].[Year ago];
+    Fore_Color(This) = Abs( Measures.CurrentMember < 0 ) * 255;
+End Scope;
+
+Scope( [Time Calcs].[Calc].[YTD Year ago i] );
+    This = [Time Calcs].[Calc].[YTD] -
+           [Time Calcs].[Calc].[YTD Year ago];
+    Fore_Color(This) = Abs( Measures.CurrentMember < 0 ) * 255;
+End Scope;

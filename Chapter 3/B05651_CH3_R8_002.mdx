@@ -1,0 +1,6 @@
+case when convert(varchar(8), FullDateAlternateKey, 112) = 
+          '2013' +
+          right(convert(varchar(8), GetDate(), 112), 4)
+     then 'Yes'
+     else 'No'
+end

@@ -1,0 +1,24 @@
+WITH 
+SET [Profit] AS
+	{ [Measures].[Internet Gross Profit],
+	  [Measures].[Reseller Gross Profit],
+	  [Measures].[Gross Profit]
+	}
+MEMBER [Measures].[Date Key] AS
+		IIF( COUNT( [Profit], EXCLUDEEMPTY ) = 0, NULL, 
+			[Date].[Calendar].CurrentMember.Member_Key
+			)
+
+SELECT {
+	[Measures].[Date Key],
+	[Profit]  } ON 0,
+NON EMPTY 
+	[Product].[Product Categories].[Subcategory].[Socks] *
+	[Date].[Calendar].[Date]
+	ON 1
+FROM
+	( SELECT 
+			[Date].[Calendar].[Date].&[20130723]:[Date].[Calendar].[Date].&[20130731] ON 0 
+	  FROM 
+			[Adventure Works]
+	)

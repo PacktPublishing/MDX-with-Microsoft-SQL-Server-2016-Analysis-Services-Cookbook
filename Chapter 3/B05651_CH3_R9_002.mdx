@@ -1,0 +1,19 @@
+WITH
+MEMBER [Measures].[Start Date] AS
+   [Promotion].[Start Date].CurrentMember.MemberValue
+MEMBER [Measures].[End Date] AS
+   [Promotion].[End Date].CurrentMember.MemberValue
+MEMBER [Measures].[Number of days] AS
+   DateDiff('d', [Measures].[Start Date],
+            [Measures].[End Date] + 1)
+SELECT
+   { [Measures].[Reseller Order Count],
+     [Measures].[Start Date],
+     [Measures].[End Date],
+     [Measures].[Number of days] } ON 0,
+   { [Promotion].[Start Date].[Start Date].MEMBERS *
+     [Promotion].[End Date].[End Date].MEMBERS } ON 1      
+FROM
+   [Adventure Works]
+WHERE
+   ( [Promotion].[Promotion Type].&[Discontinued Product] )

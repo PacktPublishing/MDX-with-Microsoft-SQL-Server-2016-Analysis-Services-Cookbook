@@ -1,0 +1,19 @@
+WITH
+MEMBER [Measures].[Count of SubCategory - Exists] AS
+   Count( Exists( 
+             [Product].[Subcategory].[Subcategory].Members, ,
+             'Reseller Orders') )
+MEMBER [Measures].[Count of SubCategory - NonEmpty] AS
+   Count( NonEmpty( 
+             [Product].[Subcategory].[Subcategory].Members,
+             { [Measures].[Reseller Order Count] } ) )                  
+SELECT
+   { [Measures].[Reseller Order Count],
+     [Measures].[Count of SubCategory - Exists],
+     [Measures].[Count of SubCategory - NonEmpty] } ON 0,
+   { TopCount( [Reseller].[Reseller].[Reseller].Members,
+                100,
+               [Measures].[Reseller Order Count]
+             ) } ON 1
+FROM
+   [Adventure Works]

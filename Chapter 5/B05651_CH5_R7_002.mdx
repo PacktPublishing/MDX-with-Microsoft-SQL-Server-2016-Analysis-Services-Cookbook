@@ -1,0 +1,37 @@
+WITH
+MEMBER [Measures].[Level] AS
+   [Sales Territory].[Sales Territory]
+   .CurrentMember.Level.Ordinal
+MEMBER [Measures].[Siblings AVG] AS
+    Avg( [Sales Territory].[Sales Territory]
+         .CurrentMember.Siblings,
+         [Measures].[Reseller Sales Amount] )
+MEMBER [Measures].[Level AVG] AS
+    Avg( [Sales Territory].[Sales Territory]
+         .CurrentMember.Level.Members,
+         [Measures].[Reseller Sales Amount] )
+MEMBER [Measures].[Hierarchy AVG] AS
+    Avg( [Sales Territory].[Sales Territory].Members,
+         [Measures].[Reseller Sales Amount] )
+MEMBER [Measures].[Leaves AVG] AS
+    Avg( Descendants( [Sales Territory].[Sales Territory]
+                                       .[All], ,
+                      Leaves ),
+         [Measures].[Reseller Sales Amount] )
+SELECT
+   { [Measures].[Level],
+     [Measures].[Reseller Sales Amount],
+	 [Measures].[Siblings AVG],
+	 [Measures].[Level AVG],
+	 [Measures].[Hierarchy AVG],
+	 [Measures].[Leaves AVG]
+   } ON 0,
+   { [Sales Territory].[Sales Territory].AllMembers } ON 1
+FROM
+   [Adventure Works]
+
+
+
+
+
+

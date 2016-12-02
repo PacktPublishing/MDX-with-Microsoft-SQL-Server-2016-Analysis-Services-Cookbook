@@ -1,0 +1,6 @@
+SELECT
+   { [Measures].[Internet Order Count] } ON 0,
+   { [Product].[Subcategory].[Subcategory].Members *
+     [Product].[Color].[Color].Members } ON 1
+FROM
+   [Adventure Works]

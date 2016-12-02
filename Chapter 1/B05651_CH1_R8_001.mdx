@@ -1,0 +1,8 @@
+WITH
+MEMBER [Measures].[Default account] AS
+     [Account].[Accounts].DefaultMember.Name
+SELECT
+   { [Measures].[Amount],
+     [Measures].[Default account] } ON 0
+FROM
+   [Adventure Works]

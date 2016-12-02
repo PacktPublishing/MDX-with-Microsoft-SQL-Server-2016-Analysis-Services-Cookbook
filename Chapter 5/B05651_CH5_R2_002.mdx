@@ -1,0 +1,12 @@
+WITH
+MEMBER [Measures].[Root member detected] AS
+   iif( [Product].[Color].CurrentMember Is
+        [Product].[Color].[All Products],
+        True,
+        null
+      )
+SELECT
+   { [Measures].[Root member detected] } ON 0,
+   { [Product].[Color].AllMembers } ON 1
+FROM
+   [Adventure Works]

@@ -1,0 +1,11 @@
+Create MEMBER CurrentCube.[Measures].[Mode Price] AS
+    iif( IsEmpty( [Measures].[Reseller Transaction Count] ),
+         null,
+         TopCount( [Price].[Price].[Price].MEMBERS,
+                   1,
+                   [Measures].[Reseller Transaction Count]
+                 ).Item(0).MemberValue
+       )
+  , Format_String = 'Currency'
+  , Display_Folder = 'Statistics'
+  , Associated_Measure_Group = 'Reseller Sales';

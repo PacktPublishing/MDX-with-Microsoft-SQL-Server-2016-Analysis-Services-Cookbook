@@ -1,0 +1,27 @@
+Create MEMBER CurrentCube.[Measures].[RO Frequency] AS
+     Sum( EXISTING [Reseller].[Reseller].[Reseller].MEMBERS,
+          iif( [Reseller Order Frequency].[Interval]
+               .CurrentMember.MemberValue =
+               [Measures].[Reseller Order Count],
+               1,
+               null
+             )
+        )
+  , Format_String = '#,#'
+  , Associated_Measure_Group = 'Reseller Orders'
+  , Display_Folder = 'Histograms'
+  ; 
+
+--The new measure from this recipe is scoped like:
+
+Scope( [Measures].[RO Frequency DSV],
+       [Reseller Order Frequency].[Interval].[Interval].Members,
+       [Reseller].[Reseller].[Reseller].Members
+     );
+    This = iif( [Reseller Order Frequency].[Interval]
+                .CurrentMember.MemberValue =
+                [Measures].[Reseller Order Count],
+                1,
+                null
+             );
+End scope;

@@ -1,0 +1,17 @@
+Create MEMBER CurrentCube.[Measures].[Product Count calc orig] AS
+    Count( EXISTING 
+           Exists( [Product].[Product].[Product].MEMBERS, ,
+                   'Sales Summary' ) )
+  , Visible = 0
+  , Format_String = '#,#'
+  , Associated_Measure_Group = 'Sales Summary'
+  , Display_Folder = 'Histograms'
+  ;
+                 
+Create MEMBER CurrentCube.[Measures].[Product Count calc] AS
+    iif( [Measures].[Product Count calc orig] = 0, null,
+         [Measures].[Product Count calc orig] )
+  , Format_String = '#,#'
+  , Associated_Measure_Group = 'Sales Summary'
+  , Display_Folder = 'Histograms'
+  ;

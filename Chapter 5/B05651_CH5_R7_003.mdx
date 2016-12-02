@@ -1,0 +1,8 @@
+MEMBER [Measures].[Siblings AVG] AS
+   iif( IsEmpty( [Measures].[Reseller Sales Amount] ),
+        null,
+        Avg( [Sales Territory].[Sales Territory]
+             .CurrentMember.Siblings,
+             [Measures].[Reseller Sales Amount]
+           )
+      )

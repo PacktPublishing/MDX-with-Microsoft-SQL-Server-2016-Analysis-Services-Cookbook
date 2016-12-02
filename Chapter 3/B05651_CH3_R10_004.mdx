@@ -1,0 +1,9 @@
+MEMBER [Measures].[My Format] AS
+   iif([Measures].[Duration in days] > 1,
+        CStr(Int([Measures].[Duration in days])) +
+ '"  "', '"0  "')
+   + 'hh:mm:ss'
+
+MEMBER [Measures].[Duration d  hh:mm:ss] AS
+   ([Measures].[End Time] - [Measures].[Start Time])
+   , FORMAT_STRING = [Measures].[My Format]

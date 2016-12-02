@@ -1,0 +1,10 @@
+SELECT	[Measures].[Reseller Sales Amount] ON COLUMNS,
+		NON EMPTY 
+		[Date].[Date].[Date] *
+		[Reseller].[Reseller].[Reseller] 
+		 ON ROWS
+FROM
+	(SELECT
+		STRTOMEMBER(@StartDate, CONSTRAINED) : STRTOMEMBER(@EndDate, CONSTRAINED)	ON COLUMNS
+	 FROM 
+		[Adventure Works] )

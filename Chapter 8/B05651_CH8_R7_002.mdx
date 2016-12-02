@@ -1,0 +1,53 @@
+Scope( [Time Calcs].[Calc].[YTD] );
+       -- focus on anything below and including year level
+    Scope( [Date].[Date].MEMBERS,
+           [Date].[Calendar Year].[Calendar Year].MEMBERS );
+          -- attribute hirarchies not related to year level
+          -- and related to months
+          -- i.e. day of month
+        Scope( [Date].[Month of Year].[Month of Year].MEMBERS );
+            This = Aggregate(
+                    YTD( [Date].[Calendar].CurrentMember ) *
+                    YTD( [Date].[Calendar Weeks].CurrentMember ) *
+                    { null : [Date].[Month of Year].CurrentMember } *
+                    { null : [Date].[Day of Month].CurrentMember },
+                    [Time Calcs].[Calc].&[0]
+                             ); 
+        End Scope;
+          -- attribute hierarchies not related to year level
+          -- and related to weeks
+          -- i.e. day of week & day name
+        Scope( [Date].[Calendar Week of Year]
+                     .[Calendar Week of Year].MEMBERS );
+            This = Aggregate(
+                    YTD( [Date].[Calendar].CurrentMember ) *
+                    YTD( [Date].[Calendar Weeks].CurrentMember ) *
+                    { null : [Date].[Calendar Week of Year]
+                                   .CurrentMember } *
+                    { null : [Date].[Day of Week].CurrentMember } *
+                    { null : [Date].[Day Name].CurrentMember },
+                    [Time Calcs].[Calc].&[0]
+                             ); 
+        End Scope;
+          -- user hierarchies
+          -- and attribute hierarchies related to year level
+        This = Aggregate(
+                    YTD( [Date].[Calendar].CurrentMember ) *
+                    YTD( [Date].[Calendar Weeks].CurrentMember ) *
+                    { null : [Date].[Calendar Semester of Year]
+                                   .CurrentMember } *
+                    { null : [Date].[Calendar Quarter of Year]
+                                   .CurrentMember } *
+                    { null : [Date].[Month of Year].CurrentMember } *
+                    { null : [Date].[Calendar Week of Year]
+                                   .CurrentMember } *
+                    { null : [Date].[Day of Year].CurrentMember } *
+                    { null : [Date].[Date].CurrentMember },
+                    [Time Calcs].[Calc].&[0]
+                        ); 
+    End Scope;
+       -- performance is improved if we preserve empty cells
+       -- remove this to get continuous date ranges
+    This = iif( IsEmpty( [Time Calcs].[Calc].&[0] ),
+                null, Measures.CurrentMember );
+End Scope;

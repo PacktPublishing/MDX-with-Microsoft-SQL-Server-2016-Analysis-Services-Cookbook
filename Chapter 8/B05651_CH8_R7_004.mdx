@@ -1,0 +1,17 @@
+Scope( [Time Calcs].[Calc].[Year ago] );
+       -- focus on anything below and including year level
+    Scope( [Date].[Date].MEMBERS,
+           [Date].[Calendar Year].[Calendar Year].MEMBERS );
+          -- jump one year back on both user hierarchies
+        This = ( ParallelPeriod( [Date].[Calendar].[Calendar Year],
+                                  1,
+                                 [Date].[Calendar].CurrentMember ),
+                 ParallelPeriod( [Date].[Calendar Weeks]
+                                       .[Calendar Year],
+                                  1,
+                                 [Date].[Calendar Weeks]
+                                       .CurrentMember ),
+                 [Time Calcs].[Calc].&[0]
+               ); 
+    End Scope;
+End Scope;

@@ -1,0 +1,17 @@
+WITH
+MEMBER [Measures].[Key for Today] AS
+   Format(Now(), 'yyyyMMdd')
+MEMBER [Measures].[Key for Today (AW)] AS
+   '2013' + Right([Measures].[Key for Today], 4)
+MEMBER [Measures].[Today (string)] AS
+   '[Date].[Calendar].[Date].&[' +
+ [Measures].[Key for Today (AW)] + ']'
+SET [Today] AS
+   StrToMember( [Measures].[Today (string)], CONSTRAINED )
+SELECT
+   { [Measures].[Key for Today],
+     [Measures].[Key for Today (AW)],
+     [Measures].[Today (string)] } ON 0,
+   { [Today] } ON 1
+FROM
+   [Adventure Works]

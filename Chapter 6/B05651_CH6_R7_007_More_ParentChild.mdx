@@ -1,0 +1,7 @@
+SELECT
+	[Measures].[Reseller Sales Amount] ON COLUMNS,
+	NON EMPTY
+	DESCENDANTS([Employee].[Employees].[Employee Level 02],,LEAVES)
+	ON ROWS
+FROM
+	[Adventure Works]

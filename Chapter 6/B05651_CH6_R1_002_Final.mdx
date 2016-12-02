@@ -1,0 +1,16 @@
+WITH 
+	MEMBER [Measures].[ParameterValue] AS
+		[Reseller].[Reseller].Currentmember.UniqueName
+	MEMBER [Measures].[ParameterCaption] AS
+		[Reseller].[Reseller].Currentmember.Member_Name
+
+SELECT
+	{ [Measures].[ParameterValue],
+	  [Measures].[ParameterCaption] } ON COLUMNS,
+	NONEMPTY (
+		[Reseller].[Reseller].[Reseller],
+		[Measures].[Reseller Sales Amount]
+		) ON ROWS
+FROM
+	[Adventure Works]
+

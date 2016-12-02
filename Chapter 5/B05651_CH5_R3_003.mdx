@@ -1,0 +1,29 @@
+WITH
+MEMBER [Measures].[Branch detected on member or below] AS
+   iif( IsAncestor( 
+        [Product].[Product Categories].[Subcategory].&[3],
+        [Product].[Product Categories].CurrentMember
+                  )
+        OR
+        [Product].[Product Categories].[Subcategory].&[3] Is
+        [Product].[Product Categories].CurrentMember,
+        True,
+        null
+      )
+MEMBER [Measures].[Branch detected on member or above] AS
+   iif( Intersect(
+          Ascendants(
+            [Product].[Product Categories].[Subcategory].&[3]
+                    ),
+            [Product].[Product Categories].CurrentMember
+                 ).Count > 0,
+        True,
+        null
+      )      
+SELECT
+   { [Measures].[Branch detected on member or above],
+     [Measures].[Branch detected on member or below] } ON 0,
+   NON EMPTY
+   { [Product].[Product Categories].AllMembers } ON 1
+FROM
+   [Adventure Works]

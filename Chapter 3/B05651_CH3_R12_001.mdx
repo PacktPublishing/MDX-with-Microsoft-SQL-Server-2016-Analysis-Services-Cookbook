@@ -1,0 +1,8 @@
+SELECT
+   { [Internet Sales Amount] } ON 0,
+   { [Product].[Color].MEMBERS } ON 1
+FROM
+   [Adventure Works]
+WHERE
+   ( { [Date].[Calendar].[Date].&[20131201] :
+       [Date].[Calendar].[Date].&[20131224] } )

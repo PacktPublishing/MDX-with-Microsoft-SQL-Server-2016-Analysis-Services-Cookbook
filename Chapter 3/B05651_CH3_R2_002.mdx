@@ -1,0 +1,4 @@
+MEMBER [Measures].[Reseller Sales PP] As
+( [Measures].[Reseller Sales Amount], 
+ParallelPeriod( [Date].[Fiscal].[Fiscal Year], 1, 
+[Date].[Fiscal].CurrentMember ) )

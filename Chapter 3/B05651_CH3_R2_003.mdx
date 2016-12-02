@@ -1,0 +1,18 @@
+WITH
+MEMBER [Measures].[Reseller Sales PP] As
+   ( [Measures].[Reseller Sales Amount], 
+     ParallelPeriod( [Date].[Fiscal].[Fiscal Year], 1, 
+                     [Date].[Fiscal].CurrentMember ) )
+   , FORMAT_STRING = 'Currency'
+MEMBER [Measures].[Reseller Sales YoY %] As
+   iif( [Measures].[Reseller Sales PP] = 0, null,
+        ( [Measures].[Reseller Sales Amount] /
+          [Measures].[Reseller Sales PP] ) )
+   , FORMAT_STRING = 'Percent'      
+SELECT
+   { [Measures].[Reseller Sales Amount],
+     [Measures].[Reseller Sales PP],
+     [Measures].[Reseller Sales YoY %] } ON 0,
+   { [Date].[Fiscal].[Month].MEMBERS } ON 1
+FROM
+   [Adventure Works]

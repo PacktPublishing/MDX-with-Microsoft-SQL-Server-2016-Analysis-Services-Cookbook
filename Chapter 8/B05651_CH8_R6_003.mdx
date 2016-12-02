@@ -1,0 +1,17 @@
+Create Hidden SET CurrentCube.[Measures Set] AS
+   { [Measures].[Extended Amount],
+      [Measures].[Freight Cost],
+      [Measures].[Sales Amount],
+      [Measures].[Standard Product Cost],
+      [Measures].[Total Product Cost],
+      [Measures].[Tax Amount] }
+  ;
+
+Scope( [Display Units Set],
+       [Measures Set] );
+    This = [Calculations - Display Units].[Display Unit].&[0]
+            /
+           10 ^ [Calculations - Display Units].[Display Unit]
+                .CurrentMember.MemberValue;
+    Format_String(This) = 'Currency';
+End Scope;

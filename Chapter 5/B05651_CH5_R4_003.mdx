@@ -1,0 +1,15 @@
+WITH
+MEMBER [Measures].[Number of colors] AS
+   Count( EXISTING [Product].[Color].[Color].Members )
+MEMBER [Measures].[Number of colors per subcategory] AS
+   Count( Exists( [Product].[Color].[Color].Members,
+                  { [Product].[Subcategory].CurrentMember } )
+        )
+SELECT
+   { [Measures].[Internet Order Count],
+     [Measures].[Number of colors],
+     [Measures].[Number of colors per subcategory] } ON 0,
+   { [Product].[Subcategory].[Subcategory].Members *
+     [Product].[Size Range].[Size Range].Members } ON 1
+FROM
+   [Adventure Works]

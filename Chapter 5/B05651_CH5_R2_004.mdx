@@ -1,0 +1,5 @@
+MEMBER [Measures].[Root member detected] AS
+   iif( [Product].[Color].CurrentMember.Level.Ordinal = 0,
+        True,
+        null
+      )

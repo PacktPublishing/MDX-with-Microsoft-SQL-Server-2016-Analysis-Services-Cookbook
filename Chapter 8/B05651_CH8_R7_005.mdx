@@ -1,0 +1,16 @@
+Scope( [Time Calcs].[Calc].[YTD Year ago] );
+       -- focus on anything below and including year level
+    Scope( [Date].[Date].MEMBERS,
+           [Date].[Calendar Year].[Calendar Year].MEMBERS );
+        This = ( ParallelPeriod( [Date].[Calendar].[Calendar Year],
+                                  1,
+                                 [Date].[Calendar].CurrentMember ),
+                 ParallelPeriod( [Date].[Calendar Weeks]
+                                       .[Calendar Year],
+                                  1,
+                                 [Date].[Calendar Weeks]
+                                       .CurrentMember ),
+                  -- don't forget to use the YTD member this time
+                 [Time Calcs].[Calc].[YTD]
+               ); 
+End Scope;

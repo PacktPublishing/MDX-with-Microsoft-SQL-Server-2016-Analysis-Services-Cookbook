@@ -1,0 +1,19 @@
+WITH MEMBER [Measures].[State] AS
+	[Customer].[Customer Geography].CurrentMember.Parent.Parent.Member_Caption
+SELECT
+	{ [Measures].[State],
+	  [Measures].[Internet Sales Amount],
+	  [Measures].[Internet Gross Profit] } ON COLUMNS,
+
+	TopCount
+    (
+		{[Date].[Calendar Year].&[2013]} *
+		[Date].[Date].[Date].Members *
+		DESCENDANTS({[Product].[Product Categories].[Subcategory].[Tires and Tubes]}) *
+		DESCENDANTS([Customer].[Customer Geography].[Country].&[United States], 
+			[Customer].[Customer Geography].[Postal Code], SELF),
+		5,
+ 	    [Measures].[Internet Gross Profit]
+    ) ON ROWS
+FROM 
+	[Adventure Works]

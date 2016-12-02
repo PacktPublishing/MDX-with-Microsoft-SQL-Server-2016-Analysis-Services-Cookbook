@@ -1,0 +1,11 @@
+WITH
+MEMBER [Measures].[Number of colors] AS
+   Count( EXISTING [Product].[Color].[Color].Members )
+SELECT
+   { [Measures].[Internet Order Count],
+     [Measures].[Number of colors] } ON 0,
+   { [Product].[Subcategory].[Subcategory].Members
+                  } ON 1
+FROM
+   [Adventure Works]
+

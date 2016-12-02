@@ -1,0 +1,14 @@
+WITH
+MEMBER [Date].[Calendar Year].[CY 2012 vs 2011 Bad] AS
+   [Date].[Calendar Year].[Calendar Year].&[2012] /
+   [Date].[Calendar Year].[Calendar Year].&[2011],
+   FORMAT_STRING = 'Percent'
+SELECT
+   { [Date].[Calendar Year].[Calendar Year].&[2012],
+     [Date].[Calendar Year].[Calendar Year].&[2011],
+     [Date].[Calendar Year].[CY 2012 vs 2011 Bad] } *
+     [Measures].[Reseller Sales Amount] ON 0,
+   { [Sales Territory].[Sales Territory].[Country].MEMBERS }
+   ON 1
+FROM
+   [Adventure Works]

@@ -1,0 +1,25 @@
+WITH
+MEMBER [Measures].[Yearly Income] AS
+    [Customer].[Customer Geography].currentmember.Properties("Yearly Income")
+MEMBER [Measures].[Total Children] AS
+    [Customer].[Customer Geography].currentmember.Properties("Total Children", TYPED)
+MEMBER [Measures].[Is Numeric] AS
+    IIF(
+       IsNumeric([Measures].[Total Children]),
+       1,
+       NULL
+       )
+
+SELECT
+    { [Measures].[Internet Sales Amount],
+      [Measures].[Yearly Income],
+      [Measures].[Total Children],
+      [Measures].[Is Numeric]
+    } ON 0,
+    TopCount(
+     [Customer].[Customer Geography].[Customer].MEMBERS,
+     10,
+     [Measures].[Internet Sales Amount]
+     ) ON 1
+FROM
+    [Adventure Works]

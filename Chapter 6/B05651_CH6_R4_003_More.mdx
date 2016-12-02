@@ -1,0 +1,22 @@
+WITH 
+SET [Visual Total] AS
+	VisualTotals(
+		{ [Product].[Product Categories].[All Products],
+		  DESCENDANTS(STRTOSET('{[Product].[Product Categories].[Accessories],[Product].[Product Categories].[Clothing]}'))
+		}
+		,
+		'Total - *'
+	)
+MEMBER [Measures].[Level] AS
+	IIF([Measures].[Internet Sales Amount] = 0, NULL, [Product].[Product Categories].CurrentMember.Level.Ordinal)
+ 
+SELECT
+	{ [Measures].[Internet Sales Amount],
+	  [Measures].[Internet Ratio to All Products],
+	  [Measures].[Internet Ratio to Parent Product],
+	  [Measures].[Level] }  ON COLUMNS,
+	NON EMPTY [Visual Total]  ON ROWS
+FROM
+	[Adventure Works]
+WHERE
+	STRTOMEMBER('[Date].[Calendar].[Month].&[2013]&[7]', CONSTRAINED)

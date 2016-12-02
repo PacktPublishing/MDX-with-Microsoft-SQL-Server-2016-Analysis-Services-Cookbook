@@ -1,0 +1,10 @@
+WITH
+MEMBER [Internet Sales CP] AS
+   Sum( { [Date].[Calendar].[Date].&[20131201] :
+          [Date].[Calendar].[Date].&[20131224] }, 
+        [Measures].[Internet Sales Amount] )         
+SELECT
+   { [Internet Sales CP] } ON 0,
+   { [Product].[Color].MEMBERS } ON 1
+FROM
+   [Adventure Works]

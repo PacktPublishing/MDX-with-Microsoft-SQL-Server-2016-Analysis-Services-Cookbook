@@ -1,0 +1,13 @@
+WITH MEMBER [Measures].[SortKey] AS
+	[Date].[Calendar].CurrentMember.membervalue
+MEMBER [Measures].[ParameterValue] AS
+	[Date].[Calendar].CurrentMember.uniquename
+SELECT
+	{[Measures].[ParameterValue], [Measures].[SortKey]} ON COLUMNS,
+	ORDER (
+		[Date].[Calendar].[Month].MEMBERS,
+		[Measures].[SortKey],
+		DESC)
+	ON ROWS
+FROM
+	[Adventure Works]

@@ -1,0 +1,54 @@
+WITH
+SET [Hierarchy Set] AS
+   NonEmpty( [Sales Territory].[Sales Territory].Members,
+             { [Measures].[Reseller Sales Amount] } )
+MEMBER [Measures].[Level] AS
+   iif( IsEmpty( [Measures].[Reseller Sales Amount] ),
+        null,
+        [Sales Territory].[Sales Territory]
+        .CurrentMember.Level.Ordinal   
+      )      
+MEMBER [Measures].[Siblings Rank] AS
+   iif( IsEmpty( [Measures].[Reseller Sales Amount] ),
+        null,
+        Rank( [Sales Territory].[Sales Territory]
+              .CurrentMember,
+              NonEmpty( [Sales Territory].[Sales Territory]
+                        .CurrentMember.Siblings,
+                        { [Measures].[Reseller Sales Amount] } 
+                      ),
+              [Measures].[Reseller Sales Amount] )
+      )      
+MEMBER [Measures].[Level Rank] AS
+   iif( IsEmpty( [Measures].[Reseller Sales Amount] ),
+        null,
+        Rank( [Sales Territory].[Sales Territory]
+              .CurrentMember,
+              NonEmpty( [Sales Territory].[Sales Territory]
+                        .CurrentMember.Level.Members,
+                        { [Measures].[Reseller Sales Amount] } 
+                      ),
+              [Measures].[Reseller Sales Amount] )
+      )      
+MEMBER [Measures].[Hierarchy Rank] AS
+   iif( IsEmpty( [Measures].[Reseller Sales Amount] ),
+        null,
+        Rank( [Sales Territory].[Sales Territory]
+              .CurrentMember,
+              [Hierarchy Set],
+              [Measures].[Reseller Sales Amount] )
+      )      
+SELECT
+   { [Measures].[Level],
+     [Measures].[Reseller Sales Amount],
+     [Measures].[Siblings Rank],
+     [Measures].[Level Rank],
+     [Measures].[Hierarchy Rank] } ON 0,
+   { [Sales Territory].[Sales Territory].AllMembers } ON 1
+FROM
+   [Adventure Works]
+
+
+
+
+

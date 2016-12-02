@@ -1,0 +1,10 @@
+MEMBER [Measures].[Siblings Rank] AS
+   iif( IsEmpty( [Measures].[Reseller Sales Amount] ),
+        null,
+        Rank( [Sales Territory].[Sales Territory]
+              .CurrentMember,
+              [Sales Territory].[Sales Territory]
+              .CurrentMember.Siblings,
+              [Measures].[Reseller Sales Amount]
+            )
+      )

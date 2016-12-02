@@ -1,0 +1,12 @@
+Scope( { Tail( NonEmpty( [Date].[Date].[Date].MEMBERS,
+                         [Measures].[Transaction Count] ),
+               1 ).Item(0).NextMember : null } );
+    This = null;
+End Scope;
+--The other things we can do to improve the solution is to provide a scope that forces the default member of the utility dimension in case a multi-select is made in the slicer. Here's 
+--the code for that.
+Scope( [Time Calcs].[Calc].MEMBERS );
+    This = iif( Count( EXISTING [Time Calcs].[Calc].MEMBERS ) > 1,
+                [Time Calcs].[Calc].&[0],
+                [Time Calcs].[Calc].CurrentMember );
+End Scope;

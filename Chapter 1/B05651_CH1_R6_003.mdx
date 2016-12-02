@@ -1,0 +1,19 @@
+WITH
+SET [Top 5 Subcategory] as
+   TopCount (
+       [Product].[Subcategory].CHILDREN,
+       5,
+       [Measures].[Internet Sales Amount]
+   )
+
+SELECT
+    [Measures].[Internet Sales Amount] on 0,
+    ORDER (
+        [Top 5 Subcategory],
+        [Product].[Subcategory].MEMBERVALUE
+    ) ON 1
+FROM
+    [Adventure Works]
+WHERE
+    ( [Date].[Calendar].[Calendar Quarter].&[2013]&[1],
+      [Sales Territory].[Sales Territory Region].[Southwest] )

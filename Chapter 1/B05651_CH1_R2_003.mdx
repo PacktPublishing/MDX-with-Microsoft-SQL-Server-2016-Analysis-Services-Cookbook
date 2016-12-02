@@ -1,0 +1,8 @@
+WITH
+MEMBER [Measures].[Dummy] AS NULL
+
+SELECT
+   { [Measures].[Dummy] } ON 0,
+   { [Customer].[Customer].[Customer].MEMBERS } ON 1
+FROM
+   [Adventure Works]

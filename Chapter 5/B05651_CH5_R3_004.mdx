@@ -1,0 +1,17 @@
+WITH
+CELL CALCULATION [Touring Bikes]
+FOR '( [Measures].[Internet Sales Amount],
+       Descendants( [Product].[Product Categories]
+                             .[Subcategory].&[3], ,
+                    SELF_AND_AFTER
+                  )
+      )'
+AS 1
+SELECT
+   { [Measures].[Internet Sales Amount] } ON 0,
+   Descendants(
+        [Product].[Product Categories].[Subcategory].&[3], ,
+        SELF_AND_AFTER
+               ) ON 1
+FROM
+   [Adventure Works]

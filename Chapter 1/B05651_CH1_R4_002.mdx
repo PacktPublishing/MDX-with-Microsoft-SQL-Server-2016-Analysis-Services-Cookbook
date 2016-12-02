@@ -1,0 +1,13 @@
+SELECT 
+    { [Measures].[Internet Sales Amount] } ON 0,
+NON EMPTY
+    Filter(
+      NonEmpty(
+                { [Customer].[Customer].[Customer].MEMBERS } *
+                { [Date].[Date].[Date].MEMBERS },
+                { [Measures].[Internet Sales Amount] }
+               ),
+      [Measures].[Internet Sales Amount] > 1000
+           ) ON 1
+FROM 
+   [Adventure Works]

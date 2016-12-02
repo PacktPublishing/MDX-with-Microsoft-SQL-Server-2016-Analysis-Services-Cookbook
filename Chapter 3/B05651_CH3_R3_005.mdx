@@ -1,0 +1,4 @@
+[Date].[Date].CurrentMember.Lag( @span - @offset ) : 
+[Date].[Date].CurrentMember.Lag( @offset )
+And
+LastPeriods( @span, [Date].[Date].CurrentMember.Lag( @offset ) )

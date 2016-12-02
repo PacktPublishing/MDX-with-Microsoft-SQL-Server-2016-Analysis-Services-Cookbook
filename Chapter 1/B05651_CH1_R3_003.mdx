@@ -1,0 +1,9 @@
+SELECT
+   { [Measures].[Internet Sales Amount] *
+     [Customer].[Customer Geography].[Country]
+   } ON 0,
+   { [Date].[Calendar Year].&[2013] *
+     [Product].[Product Categories].[Category]
+   } ON 1
+FROM
+   [Adventure Works]

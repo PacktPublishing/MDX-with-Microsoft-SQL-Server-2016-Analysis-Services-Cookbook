@@ -1,0 +1,12 @@
+WITH
+MEMBER [Measures].[Member is detected] AS
+   iif( [Product].[Color].CurrentMember Is
+        [Product].[Color].&[NA],
+        True,
+        null
+      )
+SELECT
+   { [Measures].[Member is detected] } ON 0,
+   { [Product].[Color].AllMembers } ON 1
+FROM
+   [Adventure Works]

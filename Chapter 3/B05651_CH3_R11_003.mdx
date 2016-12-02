@@ -1,0 +1,25 @@
+WITH
+MEMBER [Internet Sales CP] AS
+   Sum( { [Date].[Calendar].[Date].&[20131201] :
+          [Date].[Calendar].[Date].&[20131224] },
+        [Measures].[Internet Sales Amount] )
+MEMBER [Internet Sales PP] As
+   Sum({ [Date].[Calendar].[Date].&[20131201] :
+         [Date].[Calendar].[Date].&[20131224] },
+         ( ParallelPeriod( [Date].[Calendar].[Calendar Year],
+                           1, 
+                           [Date].[Calendar].CurrentMember ),
+       [Measures].[Internet Sales Amount] )
+      )
+   , FORMAT_STRING = 'Currency'
+MEMBER [Internet Sales YoY %] As
+   iif( [Internet Sales PP] = 0, null,
+        ( [Internet Sales CP] / [Internet Sales PP] ) )
+   , FORMAT_STRING = 'Percent'      
+SELECT
+   { [Internet Sales PP],
+     [Internet Sales CP],   
+     [Internet Sales YoY %] } ON 0,
+   { [Product].[Color].MEMBERS } ON 1
+FROM
+   [Adventure Works]
